@@ -17,12 +17,11 @@ Expo Go for iOS. https://apps.apple.com/us/app/expo-go/id982107779
 ## VSCode Extensions.
 These extensions are optional, but they are good to have.
 
-React Native Tools.
-
-React Native/React/Redux snippets.
-
-Prettier.
+1. React Native Tools.
+2. React Native/React/Redux snippets.
+3.Prettier.
 
 # Running the app.
 `cd client`
+
 `npm start`
