@@ -22,3 +22,7 @@ React Native Tools.
 React Native/React/Redux snippets.
 
 Prettier.
+
+# Running the app.
+`cd client`
+`npm start`
