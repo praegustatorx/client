@@ -19,7 +19,7 @@ These extensions are optional, but they are good to have.
 
 1. React Native Tools.
 2. React Native/React/Redux snippets.
-3.Prettier.
+3. Prettier.
 
 # Running the app.
 `cd client`
