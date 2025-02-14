@@ -7,6 +7,7 @@ const LoginPage = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const { isAuthenticated, login, logout } = useAuth()
 
+
     const signIn = () => {
         setLoading(true)
         login()
@@ -14,7 +15,7 @@ const LoginPage = () => {
         setLoading(false)
     }
     return (
-        <View style={styles.container}>
+        <View style={styles.container} lightColor='#fff' darkColor='#000'>
             <Text> Login Page </Text>
             {loading ? (
                 <ActivityIndicator color={'#000'} animating={true} size="small" />
@@ -35,7 +36,6 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#d1d1d1',
     },
 });
 

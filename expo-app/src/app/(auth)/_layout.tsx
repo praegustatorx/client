@@ -1,4 +1,4 @@
-import { Redirect, Stack } from "expo-router";
+import { Redirect, Slot } from "expo-router";
 import { useAuth } from "@/src/providers/AuthProvider";
 
 export default function AuthPagesLayout() {
@@ -6,8 +6,8 @@ export default function AuthPagesLayout() {
     const { isAuthenticated } = useAuth()
 
     if (isAuthenticated) {
-        return <Redirect href='/(tabs)' />
+        return <Redirect href='/(app)' />
     }
 
-    return <Stack />
+    return <Slot />
 }

@@ -12,13 +12,16 @@ const LoginPage = () => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} lightColor='#fff' darkColor='#000'>
             <Text> SignUp </Text>
             {loading ? (
                 <ActivityIndicator color={'#000'} animating={true} size="small" />
             ) : (
                 <>
                     <Button title="Sign Up" onPress={signUp} />
+                    <Link href={'/LoginPage'} asChild>
+                        <Button title="Login" />
+                    </Link>
                 </>
             )}
         </View>
@@ -30,7 +33,6 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#d1d1d1',
     },
 });
 

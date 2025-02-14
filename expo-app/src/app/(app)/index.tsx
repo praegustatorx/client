@@ -6,20 +6,14 @@ import { useAuth } from '@/src/providers/AuthProvider';
 import { Button } from 'react-native';
 import { Redirect } from 'expo-router';
 export default function TabOneScreen() {
+
   const { logout } = useAuth()
-
-
-  const signOut = () => {
-    console.log('Signing Out...')
-    logout()
-    return <Redirect href="/" />
-  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Home</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255, 255, 255, 0.1)" />
-      < EditScreenInfo path="app/(tabs)/index.tsx" />
+      < EditScreenInfo path="app/(app)/index.tsx" />
       <Button title="Log Out" onPress={logout} />
 
     </View >
