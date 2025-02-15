@@ -2,6 +2,7 @@
 
 ## Prerequisites.
 Node v.12 or higher. You can run `node -v` to verify.
+
 install expo: `npm install -g expo-cli`
 
 ## Running the app inside a simulator:
@@ -22,6 +23,6 @@ These extensions are optional, but they are good to have.
 3. Prettier.
 
 # Running the app.
-`cd client`
+`cd expo-app`
 
 `npm start`
