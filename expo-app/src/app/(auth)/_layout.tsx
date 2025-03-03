@@ -1,13 +1,17 @@
-import { Redirect, Slot } from "expo-router";
-import { useAuth } from "@/src/providers/AuthProvider";
-
-export default function AuthPagesLayout() {
-    const session = false; //auth is going to be here eventually
-    const { isAuthenticated } = useAuth()
-
-    if (isAuthenticated) {
-        return <Redirect href='/(app)' />
-    }
-
-    return <Slot />
-}
+import { Stack } from "expo-router";
+const AuthLayout = () => {
+  return (
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="LoginPage"
+        options={{
+          headerShown: false,
+          headerBackButtonMenuEnabled: false,
+        }}
+      />
+      <Stack.Screen name="SignUpPage" options={{ headerShown: false }} />
+    </Stack>
+  );
+};
+export default AuthLayout;
