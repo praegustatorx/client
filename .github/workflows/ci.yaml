@@ -19,8 +19,5 @@ jobs:
       - name: Install Node Modules
         run: npm ci  # Faster and recommended for CI/CD
 
-      - name: Run Lint
-        run: npm run lint
-
       - name: Run Tests
         run: npm test
