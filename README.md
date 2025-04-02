@@ -23,6 +23,4 @@ These extensions are optional, but they are good to have.
 3. Prettier.
 
 # Running the app.
-`cd expo-app`
-
 `npm start`
