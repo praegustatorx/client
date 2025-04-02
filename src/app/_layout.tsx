@@ -13,6 +13,7 @@ import { AuthProvider as AuthProviderTemp } from "../providers/AuthProvider";
 import { AuthProvider } from "../providers/auth/AuthProviderReal";
 import { useColorScheme } from "@/src/components/useColorScheme";
 import { QueryClient, QueryClientProvider } from "react-query"; // Import necessary components
+import '../../global.css';
 
 export {
   // Catch any errors thrown by the Layout component.

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { TextInput, Button, Alert, StyleSheet } from "react-native";
-import { View, Text } from "../../components/Themed";
+import { Button, Alert, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, TextInput } from "../../components/Themed";
 import { Link } from "expo-router";
 
 import { useMutation } from "react-query";
@@ -62,21 +62,21 @@ const LoginPage = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
       <TextInput
-        style={styles.input}
         placeholder="Email"
+        style={styles.input}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
       />
       <TextInput
-        style={styles.input}
         placeholder="Password"
         value={password}
+        style={styles.input}
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
+      <Button title="Login" onPress={handleLogin} color={'orange'} />
       <Link href="/SignUpPage">
         <Text style={styles.link}>Don't have an account? Sign Up</Text>
       </Link>
@@ -102,7 +102,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 12,
     borderWidth: 1,
-    color: "white",
   },
   link: {
     marginTop: 16,

@@ -1,11 +1,16 @@
 import { Link, Redirect } from "expo-router";
 import { StyleSheet, Button } from "react-native";
-import { View, Text } from "../../components/Themed";
+import { Text } from "../../components/Themed";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Index = () => {
   return (
-    <View style={styles.pageContainer}>
-      <View style={styles.container}>
+    <SafeAreaView className="flex flex-col h-full justify-end">
+      <View className="flex flex-col justify-center items-center h-[85%]">
+        <Text> introductory carousel </Text>
+      </View>
+      <View className="flex flex-row justify-between items-center h-[10%] px-5">
         <Link href={"/LoginPage"} asChild>
           <Button title="Login" />
         </Link>
@@ -13,27 +18,9 @@ const Index = () => {
           <Button title="Sign Up" />
         </Link>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default Index;
 
-const styles = StyleSheet.create({
-  pageContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-  },
-  container: {
-    flex: 1,
-    height: 90,
-    flexDirection: "row",
-    padding: 10,
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderTopWidth: 1,
-    borderColor: "white",
-  },
-});
