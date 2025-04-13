@@ -1,10 +1,25 @@
-import { Link, Redirect } from "expo-router";
+import { Redirect } from "expo-router";
 
-import { useAuth } from "../providers/AuthProvider";
+import { useSession } from "../providers/auth/AuthProvider";
+import { SplashScreen } from "expo-router";
+import { useEffect } from "react";
+
+//the default behavior of the splash screen is to hide when the app is loaded
+//instead we manually hide it when the session is loaded. neat :)
+
+// we may wanna load more stuff in the future like fonts or images, this can happen here too
+SplashScreen.preventAutoHideAsync();
+
 const Index = () => {
-  const { isAuthenticated } = useAuth();
+  const { session, isLoading } = useSession();
 
-  if (isAuthenticated) {
+  useEffect(() => {
+    if (!isLoading) {
+      SplashScreen.hideAsync();
+    }
+  }, [isLoading]);
+
+  if (session) {
     return <Redirect href={"/(app)"} />;
   } else {
     return <Redirect href={"/(auth)"} />;

@@ -1,128 +1,134 @@
 import { useState } from "react";
-import { Button, Alert, StyleSheet } from "react-native";
-import { TextInput } from "../../components/Themed";
-import { View, Text } from "../../components/Themed";
-import { Link } from "expo-router";
-import axios from "axios";
-import { useMutation } from "react-query";
-
-interface RegisterCredentials {
-  email: string;
-  name: string;
-  password: string;
-}
-
+import {
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+  View,
+} from "react-native";
+import { Text as StyledText } from "../../components/Themed";
+import { router } from "expo-router";
+import { useRegisterMutation } from "@/src/hooks/mutations/useRegisterMutation";
+import { SafeAreaView } from "react-native-safe-area-context";
+import WavyBackground from "@/src/components/WaveBackground";
+import EmailInput from "@/src/components/inputs/EmailInput";
+import NameInput from "@/src/components/inputs/NameInput";
+import PasswordInput from "@/src/components/inputs/PasswordInput";
+import ConfirmPasswordInput from "@/src/components/inputs/ConfirmPasswordInput";
+import BaseButton from "@/src/components/BaseButton";
+import * as passwordUtils from "@/src/utils/passwordUtils";
+import { validateEmail } from "@/src/utils/emailUtils";
+import { ErrorResponse } from "@/src/api/api";
 
 const SignUpPage = () => {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [isEmailValid, setIsEmailValid] = useState(true);
 
-  const register = async (
-    credentials: RegisterCredentials
-  ): Promise<RegisterCredentials> => {
-    const response = await axios.post(
-      "http://10.154.252.20:8005/auth/register",
-      credentials
-    );
-    console.log(response);
-    return response.data;
-  };
+  const [name, setName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [passwordIsVisible, setPasswordIsVisible] = useState<boolean>(false);
 
-  const mutation = useMutation<RegisterCredentials, Error, RegisterCredentials>(
-    register,
-    {
-      onSuccess: (data) => {
-        // Show an alert with the modified email and password
-        Alert.alert(
-          "Signed up successfully",
-        );
-      },
-      onError: (error) => {
-        Alert.alert("Error", `Something went wrong: ${error.message}`);
-      },
-    }
-  );
+  const register = useRegisterMutation();
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!email || !password || !confirmPassword) {
       Alert.alert("Error", "Please fill out all fields");
       return;
     }
-    if (password !== confirmPassword) {
+
+    if (!validateEmail(email)) {
+      Alert.alert("Error", "Please enter a valid email address");
+      return;
+    }
+
+    if (!passwordUtils.comparePasswords(password, confirmPassword)) {
       Alert.alert("Error", "Passwords do not match");
       return;
     }
-    console.log('registering')
-    mutation.mutate({ email, name, password });
+    if (passwordUtils.validatePasswordLength(password)) {
+      Alert.alert("Error", "Password must be between 8 and 36 characters long");
+      return;
+    }
 
+    if (passwordUtils.isPasswordFormatInvalid(password)) {
+      Alert.alert(
+        "Error",
+        "Password must contain at least one uppercase letter and one number"
+      );
+      return;
+    }
+
+    await register.mutateAsync(
+      { email, name, password },
+      {
+        onSuccess: (data) => {
+          router.push("/");
+          Alert.alert("Registration successful", "You can now try and log in");
+        },
+      onError: (error: ErrorResponse) => {
+          Alert.alert("Error", error.message);
+        },
+      }
+    );
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+    <SafeAreaView className="h-full flex">
+      <WavyBackground />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        value={name}
-        onChangeText={setName}
-      />
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingVertical: 20,
+          }}
+        >
+          <View className="px-8 w-full">
+            <StyledText className="font-bold text-3xl mb-5">Sign Up</StyledText>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-      />
-      <Button title="Sign Up" onPress={handleSignUp} />
-      <Link href="/LoginPage">
-        <Text style={styles.link}>Already have an account? Log In</Text>
-      </Link>
-    </View>
+            <EmailInput
+              email={email}
+              isEmailValid={isEmailValid}
+              setEmail={setEmail}
+              setIsEmailValid={setIsEmailValid}
+              withValidationComponent={true}
+            />
+            <NameInput name={name} setName={setName} />
+
+            <PasswordInput
+              password={password}
+              setPassword={setPassword}
+              passwordIsVisible={passwordIsVisible}
+              setPasswordIsVisible={setPasswordIsVisible}
+              withValidationMessages={true}
+            />
+            <ConfirmPasswordInput
+              password={password}
+              confirmPassword={confirmPassword}
+              setConfirmPassword={setConfirmPassword}
+              passwordIsVisible={passwordIsVisible}
+              setPasswordIsVisible={setPasswordIsVisible}
+            />
+            <BaseButton
+              onPress={handleSignUp}
+              variant="primary"
+              size="sm"
+              testID="sign-up-button"
+            >
+              Sign Up
+            </BaseButton>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-  input: {
-    width: "80%",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  link: {
-    marginTop: 16,
-    color: "#3b82f6",
-    textAlign: "center",
-  },
-});
 
 export default SignUpPage;
