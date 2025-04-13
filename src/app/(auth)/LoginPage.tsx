@@ -1,113 +1,114 @@
 import { useState } from "react";
-import { Button, Alert, StyleSheet, TouchableOpacity } from "react-native";
-import { View, Text, TextInput } from "../../components/Themed";
-import { Link } from "expo-router";
+import {
+  Button,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Text,
+} from "react-native";
 
-import { useMutation } from "react-query";
-import axios from "axios";
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export const login = async (
-  credentials: LoginCredentials
-): Promise<LoginCredentials> => {
-  const response = await axios.post(
-    "http://192.168.1.199:8000/auth/login",
-    credentials
-  );
-  console.log(response);
-  return response.data;
-};
-
-export const test = async () => {
-  const response = await axios.get("http://localhost:8000/auth/test");
-  console.log(response);
-  return response.data;
-};
+import {
+  Text as StyledText,
+  View as StyledView,
+  Feather,
+} from "../../components/Themed";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useSession } from "../../providers/auth/AuthProvider";
+import WaveBackground from "@/src/components/WaveBackground";
+import BaseInput from "@/src/components/inputs/BaseInput";
+import BaseButton from "@/src/components/BaseButton";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  // Define the mutation using React Query
-  const mutation = useMutation<LoginCredentials, Error, LoginCredentials>(
-    login,
-    {
-      onSuccess: (data) => {
-        // Show an alert with the modified email and password
-        Alert.alert(
-          "Login Success",
-          `Email: ${data.email}\nPassword: ${data.password}`
-        );
-      },
-      onError: (error) => {
-        Alert.alert("Error", `Something went wrong: ${error.message}`);
-      },
-    }
-  );
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [passwordIsVisible, setPasswordIsVisible] = useState<boolean>(false);
+  const { signIn } = useSession();
 
   const handleLogin = () => {
     if (email && password) {
-      // test();
-      mutation.mutate({ email, password });
+      signIn(email, password);
     } else {
       Alert.alert("Error", "Please enter email and password");
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        placeholder="Email"
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        style={styles.input}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button title="Login" onPress={handleLogin} color={'orange'} />
-      <Link href="/SignUpPage">
-        <Text style={styles.link}>Don't have an account? Sign Up</Text>
-      </Link>
-    </View>
+    <SafeAreaView className="flex-1">
+      <WaveBackground />
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 16,
+          }}
+        >
+          <View className="px-8 w-full">
+            <StyledText className="font-bold text-3xl mb-5">Login</StyledText>
+            {/* Email Input */}
+            <View className="flex-row items-center w-full mb-5 relative">
+              <View className="mr-4">
+                <Feather name="mail" size={22} />
+              </View>
+              <BaseInput
+                placeholder="Email ID"
+                onChangeText={setEmail}
+                value={email}
+                testID="email-input"
+              />
+            </View>
+
+            {/* Password Input */}
+            <View className="flex-row items-center w-full mb-5 relative">
+              <View className="mr-4">
+                <Feather name="lock" size={22} />
+              </View>
+              <BaseInput
+                placeholder="Password"
+                secureTextEntry={!passwordIsVisible}
+                onChangeText={setPassword}
+                value={password}
+                testID="password-input"
+              />
+              <TouchableOpacity
+                className="absolute right-0"
+                onPress={() => setPasswordIsVisible(!passwordIsVisible)}
+              >
+                <Feather
+                  name={passwordIsVisible ? "eye" : "eye-off"}
+                  size={20}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity className="self-end">
+              <StyledText className="text-base font-medium">
+                Forgot password?
+              </StyledText>
+            </TouchableOpacity>
+
+            <BaseButton
+              onPress={handleLogin}
+              variant="primary"
+              size="sm"
+              testID="login-button"
+            >
+              Login
+            </BaseButton>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-  input: {
-    width: "80%",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
-    borderWidth: 1,
-  },
-  link: {
-    marginTop: 16,
-    color: "#3b82f6",
-    textAlign: "center",
-  },
-});
 
 export default LoginPage;

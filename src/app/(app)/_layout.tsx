@@ -7,7 +7,7 @@ import { Pressable } from "react-native";
 import Colors from "@/src/constants/Colors";
 import { useColorScheme } from "@/src/components/useColorScheme";
 import { useClientOnlyValue } from "@/src/components/useClientOnlyValue";
-import { useAuth } from "@/src/providers/AuthProvider";
+import { useSession } from "@/src/providers/auth/AuthProvider";
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 
 function TabBarIcon(props: {
@@ -19,9 +19,9 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { isAuthenticated } = useAuth();
+  const { session } = useSession();
 
-  if (!isAuthenticated) {
+  if (!session) {
     return <Redirect href="/(auth)" />;
   }
 

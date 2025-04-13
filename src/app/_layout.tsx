@@ -9,11 +9,10 @@ import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
-import { AuthProvider as AuthProviderTemp } from "../providers/AuthProvider";
-import { AuthProvider } from "../providers/auth/AuthProviderReal";
+import { AuthProvider } from "../providers/auth/AuthProvider";
 import { useColorScheme } from "@/src/components/useColorScheme";
 import { QueryClient, QueryClientProvider } from "react-query"; // Import necessary components
-import '../../global.css';
+import "../../global.css";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -57,13 +56,11 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <AuthProviderTemp>
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <QueryClientProvider client={queryClient}>
-            <Slot />
-          </QueryClientProvider>
+          <Slot />
         </AuthProvider>
-      </AuthProviderTemp>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

@@ -8,6 +8,7 @@ const AuthLayout = () => {
         options={{
           headerShown: false,
           headerBackButtonMenuEnabled: false,
+          // gestureEnabled: false,
         }}
       />
       <Stack.Screen name="SignUpPage" options={{ headerShown: false }} />
