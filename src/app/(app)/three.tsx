@@ -1,11 +1,10 @@
-import { View, Text } from 'react-native'
+import { SafeAreaView, Text } from "react-native";
 
 const Three = () => {
-    return (
-        <View>
-            <Text>Three</Text>
-        </View>
-    )
-
-}
-export default Three
+  return (
+    <SafeAreaView>
+      <Text>Three</Text>
+    </SafeAreaView>
+  );
+};
+export default Three;

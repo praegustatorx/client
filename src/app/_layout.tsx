@@ -11,7 +11,8 @@ import { useEffect } from "react";
 
 import { AuthProvider } from "../providers/auth/AuthProvider";
 import { useColorScheme } from "@/src/components/useColorScheme";
-import { QueryClient, QueryClientProvider } from "react-query"; // Import necessary components
+
+import { QueryClient, QueryClientProvider } from "react-query";
 import "../../global.css";
 
 export {
