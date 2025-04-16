@@ -6,7 +6,7 @@ Node v.12 or higher. You can run `node -v` to verify.
 install expo: `npm install -g expo-cli`
 
 ## Running the app inside a simulator:
-todo
+Follow the tutorial provided by Expo for your os: https://docs.expo.dev/workflow/android-studio-emulator/
 
 ## Running the natively on device:
 if you want to run the app natively on devices you are going to need the Expo GO app.
