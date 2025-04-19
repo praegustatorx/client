@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/Colors";
 import { TouchableOpacity } from "react-native";
 import { Feather } from "./Themed";
+import { View as ThemedView } from "./Themed";
 
 interface MessageInputProps {
   onShouldSend: (message: string) => void;
@@ -22,15 +23,13 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSend }) => {
     setMessage("");
   };
   return (
-    <BlurView
-      intensity={75}
+    <ThemedView
       style={{
         paddingBottom: 10,
         paddingTop: 10,
       }}
-      tint="extraLight"
     >
-      <View className="w-full h-full bg">
+      <View className="w-full bg">
         <View style={styles.row}>
           <TextInput
             style={styles.messageInput}
@@ -49,7 +48,7 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSend }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </BlurView>
+    </ThemedView>
   );
 };
 

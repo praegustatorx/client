@@ -72,6 +72,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="chat"
         options={{
+          tabBarStyle: {
+            borderTopWidth: 0,
+          },
           title: "ChatBot",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="comment" color={color} />
