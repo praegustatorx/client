@@ -24,12 +24,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const LoginMutation = useLoginMutation();
 
   const signIn = (email: string, password: string) => {
-    setSession("cool");
-    router.push("/(app)");
     LoginMutation.mutate(
       { email, password },
       {
-        onSuccess(data) {},
+        onSuccess(data) {
+          setSession(data.token);
+          router.push("/(app)");
+        },
         onError(error: ErrorResponse) {
           Alert.alert("Error", error.message);
         },
