@@ -19,6 +19,7 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSend }) => {
   const expanded = useSharedValue(0);
 
   const onSend = () => {
+    onShouldSend(message);
     //send the message
     setMessage("");
   };

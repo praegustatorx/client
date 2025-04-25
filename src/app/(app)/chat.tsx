@@ -11,7 +11,7 @@ import { ErrorResponse } from "@/src/api/api";
 import ChatFeed from "@/src/components/ChatFeed";
 
 const ChatScreen = () => {
-  const [messages, setMessages] = useState(dummyMessages);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [height, setHeight] = useState(0);
   const ask = useSendMessageMutation();
 
