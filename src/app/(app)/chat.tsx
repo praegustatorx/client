@@ -1,11 +1,8 @@
-import { View } from "@/src/components/Themed";
-import { Alert, Platform, SafeAreaView, TouchableOpacity } from "react-native";
+import { Alert, Platform, SafeAreaView } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import MessageInput from "@/src/components/MessageInput";
-import { dummyMessages } from "@/src/utils/dummyMessages";
 import { Message } from "@/src/utils/Interfaces";
-import { FlashList } from "@shopify/flash-list";
 import { useSendMessageMutation } from "@/src/hooks/mutations/useChatbotMutation";
 import { ErrorResponse } from "@/src/api/api";
 import ChatFeed from "@/src/components/ChatFeed";
