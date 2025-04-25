@@ -53,23 +53,21 @@ const ChatFeed = ({ messages, height, onLayout }: ChatMessagesProps) => {
 
   return (
     <View className="flex-1" onLayout={onLayout}>
-      {messages.length === 0 && <NoChatMessagesView height={height} />}
-
-      {messages.length > 0 && (
-        <FlashList
-          data={messages}
-          ref={chatRef}
-          estimatedItemSize={400}
-          renderItem={({ item, index }) => (
-            <ChatMessage message={item} hasBackground={index % 2 === 0} />
-          )}
-          keyExtractor={(_, index) => index.toString()}
-          contentContainerStyle={{ paddingBottom: 50, paddingTop: 20 }}
-          keyboardDismissMode="interactive"
-          keyboardShouldPersistTaps="handled"
-          onScroll={handleScroll}
-        />
-      )}
+      <FlashList
+        data={messages}
+        ref={chatRef}
+        estimatedItemSize={400}
+        renderItem={({ item, index }) => (
+          <ChatMessage message={item} hasBackground={index % 2 === 0} />
+        )}
+        keyExtractor={(_, index) => index.toString()}
+        contentContainerStyle={{ paddingBottom: 50, paddingTop: 20 }}
+        keyboardDismissMode="interactive"
+        keyboardShouldPersistTaps="handled"
+        onScroll={handleScroll}
+        ListEmptyComponent={() => <NoChatMessagesView height={height} />}
+        initialScrollIndex={messages.length - 1}
+      />
 
       <AnimatedTouchable
         onPress={scrollToBottom}
