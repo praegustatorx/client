@@ -6,6 +6,12 @@ import { Message } from "@/src/utils/Interfaces";
 import { useSendMessageMutation } from "@/src/hooks/mutations/useChatbotMutation";
 import { ErrorResponse } from "@/src/api/api";
 import ChatFeed from "@/src/components/ChatFeed";
+import {
+  createConfirmedMessage,
+  createFailedMessage,
+  createPendingMessage,
+  replacePendingMessageWithResult,
+} from "@/src/utils/chatMessageUtils";
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -17,7 +23,7 @@ const ChatScreen = () => {
     setHeight(height / 2);
   };
 
-  const chatId = "TestUser";
+  const chatId = "TestUser"; //TODo Replace this with user.
   const askChatbot = async (message: string) => {
     const response = await ask.mutateAsync(
       { chatId, message },
@@ -33,28 +39,55 @@ const ChatScreen = () => {
   const handleSendMessage = async (inputText: string) => {
     if (!inputText.trim()) return;
 
-    const userMessage: Message = {
-      role: "User",
-      content: inputText,
-      timestamp: new Date().toISOString(),
-    };
+    const pendingAssistantMessage = createPendingMessage("Assistant");
+    const pendingUserMessage = createPendingMessage("User", inputText);
 
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setMessages((prevMessages) => [...prevMessages, pendingUserMessage]);
 
     try {
-      // Get chatbot response
+      await askChatbot(inputText);
+
+      const confirmedUserMessage = createConfirmedMessage("User", inputText);
+      setMessages((prevMessages) =>
+        replacePendingMessageWithResult(
+          prevMessages,
+          pendingUserMessage,
+          confirmedUserMessage
+        )
+      );
+
+      setMessages((prevMessages) => [...prevMessages, pendingAssistantMessage]);
       const response = await askChatbot(inputText);
 
-      // Add chatbot response
-      const botMessage: Message = {
-        role: "Assistant",
-        content: response,
-        timestamp: new Date().toISOString(),
-      };
-
-      setMessages((prevMessages) => [...prevMessages, botMessage]);
+      const confirmedAssistantMessage = createConfirmedMessage(
+        "Assistant",
+        response
+      );
+      setMessages((prevMessages) =>
+        replacePendingMessageWithResult(
+          prevMessages,
+          pendingAssistantMessage,
+          confirmedAssistantMessage
+        )
+      );
     } catch (error) {
-      console.error("Failed to get chatbot response:", error);
+      const failedUserMessage = createFailedMessage("User", inputText);
+      setMessages((prevMessages) =>
+        replacePendingMessageWithResult(
+          prevMessages,
+          pendingUserMessage,
+          failedUserMessage
+        )
+      );
+
+      const failedAssistantMessage = createFailedMessage("Assistant", "");
+      setMessages((prevMessages) =>
+        replacePendingMessageWithResult(
+          prevMessages,
+          pendingAssistantMessage,
+          failedAssistantMessage
+        )
+      );
     }
   };
 
