@@ -78,7 +78,7 @@ export default function TabLayout() {
           tabBarStyle: {
             borderTopWidth: 0,
           },
-          title: "ChatBot",
+          title: "Foodie",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="comment" color={color} />
           ),
