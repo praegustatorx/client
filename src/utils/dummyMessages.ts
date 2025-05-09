@@ -5,16 +5,19 @@ export const dummyMessages: Message[] = [
     role: "User",
     content: "Hello, how are you?",
     timestamp: new Date().toISOString(),
+    status: "Failed",
   },
   {
     role: "Assistant",
     content: "I'm doing well, thank you! How can I assist you today?",
     timestamp: new Date().toISOString(),
+    status: "Failed",
   },
   {
     role: "User",
     content: "Can you tell me a joke?",
     timestamp: new Date().toISOString(),
+    status: "Pending",
   },
   {
     role: "Assistant",
@@ -52,7 +55,8 @@ export const dummyMessages: Message[] = [
   {
     role: "Assistant",
     content:
-      "Of course! Recursion is a process where a function calls itself as a subroutine. It allows problems to be solved in smaller, more manageable pieces.",
+      "Of course! Recursion is a process where a function calls itself as a subroutine. It allows problems to be solved in smaller, more manageable pieces.Of course! Recursion is a process where a function calls itself as a subroutine. It allows problems to be solved in smaller, more manageable pieces.Of course! Recursion is a process where a function calls itself as a subroutine. It allows problems to be solved in smaller, more manageable pieces.Of course! Recursion is a process where a function calls itself as a subroutine. It allows problems to be solved in smaller, more manageable pieces.Of course! Recursion is a process where a function calls itself as a subroutine. It allows problems to be solved in smaller, more manageable pieces.",
+
     timestamp: new Date().toISOString(),
   },
   {

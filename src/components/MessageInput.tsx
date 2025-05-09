@@ -15,8 +15,6 @@ interface MessageInputProps {
 
 const MessageInput: FC<MessageInputProps> = ({ onShouldSend }) => {
   const [message, setMessage] = useState<string>("");
-  const insets = useSafeAreaInsets();
-  const expanded = useSharedValue(0);
 
   const onSend = () => {
     onShouldSend(message);

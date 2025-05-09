@@ -78,6 +78,7 @@ export default function TabLayout() {
           tabBarStyle: {
             borderTopWidth: 0,
           },
+          headerShown: false,
           title: "Foodie",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="comment" color={color} />

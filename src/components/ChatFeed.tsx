@@ -1,7 +1,7 @@
 import { View, Text as StyledText, Feather } from "@/src/components/Themed";
 import { Alert, TouchableOpacity } from "react-native";
 import { useEffect, useRef, useState } from "react";
-import ChatMessage from "@/src/components/ChatMessage";
+import ChatMessage from "@/src/components/ChatMessages/ChatMessage";
 import NoChatMessagesView from "@/src/components/NoChatMessagesView";
 import { FlashList } from "@shopify/flash-list";
 import { Message } from "@/src/utils/Interfaces";
@@ -57,9 +57,7 @@ const ChatFeed = ({ messages, height, onLayout }: ChatMessagesProps) => {
         data={messages}
         ref={chatRef}
         estimatedItemSize={400}
-        renderItem={({ item, index }) => (
-          <ChatMessage message={item} hasBackground={index % 2 === 0} />
-        )}
+        renderItem={({ item, index }) => <ChatMessage message={item} />}
         keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={{ paddingBottom: 50, paddingTop: 20 }}
         keyboardDismissMode="interactive"

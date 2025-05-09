@@ -12,6 +12,7 @@ import {
   createPendingMessage,
   replacePendingMessageWithResult,
 } from "@/src/utils/chatMessageUtils";
+import { dummyMessages } from "@/src/utils/dummyMessages";
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -94,9 +95,8 @@ const ChatScreen = () => {
   return (
     <SafeAreaView style={{ height: "100%" }}>
       <KeyboardAvoidingView
+        style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={95}
-        className="flex-1"
       >
         <ChatFeed height={height} messages={messages} onLayout={onLayout} />
         <MessageInput onShouldSend={handleSendMessage} />
