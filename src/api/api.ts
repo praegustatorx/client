@@ -50,3 +50,28 @@ export const register = async (
     throw errorResponse;
   }
 };
+export interface SendMessage {
+  chatId: string;
+  message: string;
+}
+
+export interface MessageResponse {
+  message: string;
+}
+
+export const sendMessage = async (
+  message: SendMessage
+): Promise<MessageResponse> => {
+  console.log("actual http://10.154.252.24:8005/chat");
+  console.log(`${API_URL}/chat/`);
+  try {
+    const response = await axios.post(`${API_URL}/chat/`, message);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};

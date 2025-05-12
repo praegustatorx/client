@@ -1,40 +1,15 @@
-import { StyleSheet } from "react-native";
-
-import EditScreenInfo from "@/src/components/EditScreenInfo";
-import { Text, View } from "@/src/components/Themed";
+import { Text, View as StyledView } from "@/src/components/Themed";
+import { View, SafeAreaView } from "react-native";
 import { useSession } from "@/src/providers/auth/AuthProvider";
-import { Button } from "react-native";
 
 export default function TabOneScreen() {
   const { signOut } = useSession();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255, 255, 255, 0.1)"
-      />
-      <EditScreenInfo path="app/(app)/index.tsx" />
-      <Button title="Log Out" onPress={signOut} />
-    </View>
+    <SafeAreaView className="h-[100%]">
+      <View className="flex-1 px-3">
+        <Text className="text-3xl font-extrabold">Pantry</Text>
+      </View>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});

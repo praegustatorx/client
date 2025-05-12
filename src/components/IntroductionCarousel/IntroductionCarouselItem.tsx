@@ -1,13 +1,9 @@
 import { type FC } from "react";
 import { Text } from "../Themed";
 import { slides, type Slide } from "./slides";
-import {
-  View,
-  FlatList,
-  useWindowDimensions,
-  Image,
-  StyleSheet,
-} from "react-native";
+
+import { View, FlatList, useWindowDimensions, StyleSheet } from "react-native";
+import { Image } from "expo-image";
 
 interface IntroductionCarouselItemProps {
   item: Slide;
