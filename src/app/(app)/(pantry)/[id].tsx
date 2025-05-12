@@ -59,7 +59,6 @@ const PantryDetails = () => {
         <Text style={styles.sectionTitle}>Storage Notes</Text>
         <Text style={styles.description}>{item.notes}</Text>
 
-        {/* Nutritional Information */}
         <Text style={styles.sectionTitle}>Nutritional Information</Text>
         {Object.entries(item.nutrition).map(([key, value]) => (
           <View key={key} style={styles.nutritionRow}>
@@ -75,7 +74,6 @@ const PantryDetails = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
   },
   scrollContent: {
     padding: 24,
@@ -92,11 +90,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#fff",
     textAlign: "center",
   },
   source: {
-    color: "#aaa",
     fontSize: 14,
     textAlign: "center",
     marginTop: 4,
@@ -107,24 +103,20 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   metaItem: {
-    color: "#ccc",
     fontSize: 12,
     textAlign: "center",
   },
   metaValue: {
     fontWeight: "600",
     fontSize: 14,
-    color: "#fff",
   },
   sectionTitle: {
-    color: "#fff",
     fontWeight: "700",
     fontSize: 16,
     marginTop: 32,
     marginBottom: 8,
   },
   description: {
-    color: "#eee",
     fontSize: 14,
     lineHeight: 20,
   },
@@ -136,11 +128,9 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   nutritionKey: {
-    color: "#ccc",
     fontSize: 14,
   },
   nutritionValue: {
-    color: "#fff",
     fontSize: 14,
     fontWeight: "500",
   },

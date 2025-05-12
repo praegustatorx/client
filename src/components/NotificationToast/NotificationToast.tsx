@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingHorizontal: 16,
+    paddingVertical: 50,
     zIndex: 9999,
   },
   toast: {

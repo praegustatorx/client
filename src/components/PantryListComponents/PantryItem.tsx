@@ -12,20 +12,16 @@ import DeleteIcon from "../Icons/DeleteIcon";
 import { Ionicons } from "@expo/vector-icons"; // Ensure expo/vector-icons is installed
 import { useDeletePantryIngredient } from "@/src/hooks/mutations/useDeletePantryIngredient";
 import { useQueryClient } from "react-query";
+import { useNotificationToast } from "@/src/providers/ToastContext";
 
 interface PantryItemProps {
   item: Ingredient;
-  successToast: (value: boolean) => void;
-  failureToast: (value: boolean) => void;
 }
 
-const PantryItem: FC<PantryItemProps> = ({
-  item,
-  successToast,
-  failureToast,
-}) => {
+const PantryItem: FC<PantryItemProps> = ({ item }) => {
   const mutation = useDeletePantryIngredient();
   const client = useQueryClient();
+  const { showToast } = useNotificationToast();
 
   const onDeletePantryItem = (userId: string, pantryItemId: string) => {
     mutation.mutate(
@@ -33,10 +29,18 @@ const PantryItem: FC<PantryItemProps> = ({
       {
         onSuccess: () => {
           client.invalidateQueries("pantryItems");
-          successToast(true);
+          showToast({
+            title: "Item Deleted",
+            message: "Item has been deleted from the pantry",
+            duration: 3000,
+          });
         },
         onError: () => {
-          failureToast(true);
+          showToast({
+            title: "Failure",
+            message: "Something went wrong.",
+            duration: 3000,
+          });
         },
       }
     );

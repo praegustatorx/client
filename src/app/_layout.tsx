@@ -14,6 +14,7 @@ import { useColorScheme } from "@/src/components/useColorScheme";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 import "../../global.css";
+import { NotificationToastProvider } from "../providers/ToastContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -59,14 +60,16 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen
-              name="modal"
-              options={{
-                presentation: "modal",
-              }}
-            />
-          </Stack>
+          <NotificationToastProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen
+                name="modal"
+                options={{
+                  presentation: "modal",
+                }}
+              />
+            </Stack>
+          </NotificationToastProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>

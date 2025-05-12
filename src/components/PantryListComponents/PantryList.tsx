@@ -23,8 +23,6 @@ const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
 
 const PantryList: FC<PantryListProps> = (props) => {
   const { onScroll, scrollY, data } = props;
-  const [showSuccessToast, setShowSuccessToast] = useState<boolean>(false);
-  const [showFalureToast, setShowFailureToast] = useState<boolean>(false);
 
   return (
     <>
@@ -37,12 +35,7 @@ const PantryList: FC<PantryListProps> = (props) => {
             onScroll={onScroll}
             estimatedItemSize={100}
             renderItem={({ item, index }: { item: any; index: number }) => (
-              <PantryItem
-                item={item}
-                key={index}
-                successToast={setShowSuccessToast}
-                failureToast={setShowFailureToast}
-              />
+              <PantryItem item={item} key={index} />
             )}
             keyExtractor={(_, index) => index.toString()}
             contentContainerStyle={{
@@ -57,23 +50,6 @@ const PantryList: FC<PantryListProps> = (props) => {
           />
         )}
       </View>
-      <NotificationToast
-        visible={showSuccessToast}
-        title="Item Deleted"
-        message="Item has been deleted from the pantry"
-        onClose={() => setShowSuccessToast(false)}
-      >
-        <SuccessIcon color="black" size={22} />
-      </NotificationToast>
-
-      <NotificationToast
-        visible={showFalureToast}
-        title="Failure"
-        message="Something went wrong."
-        onClose={() => setShowFailureToast(false)}
-      >
-        <FailIcon color="black" size={22} />
-      </NotificationToast>
     </>
   );
 };

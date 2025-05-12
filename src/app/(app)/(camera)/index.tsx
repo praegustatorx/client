@@ -55,7 +55,6 @@ const CameraScreen = () => {
       } as any);
     }
 
-    console.log("onAction");
     api.uploadImage(formData);
   };
 

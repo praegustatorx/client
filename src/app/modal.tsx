@@ -21,6 +21,7 @@ import DateInput from "../components/ManualPantryInsertModalComponents/DateInput
 import { usePutItemIngredientMutation } from "../hooks/mutations/usePutItemIngredientMutation";
 import { useQueryClient } from "react-query";
 import ManualPantryAddModal from "../components/Modal/ManualPantryAddModal";
+import { units } from "../utils/Units";
 
 export default function ModalScreen() {
   const [brand, setBrand] = useState<string>("");
@@ -61,34 +62,18 @@ export default function ModalScreen() {
     }
     putIngredientInPantry.mutate(
       {
-        id: brand, // Should be the unique identifier for the ingredient
         brand: brand, // From input
         type: category, // Category input
         quantity: {
-          quantity: quantity,
-          unity: quantityUnit,
+          amount: quantity,
+          unit: quantityUnit,
         },
         nutrition: {
-          portion: {
-            amount: portion,
-            unit: portionUnit,
-          },
-          calories: [
-            { amount: KCAL, unit: "kilocalorie" },
-            { amount: kJ, unit: "kilojoule" },
-          ], // Get from inputs
-          protein: {
-            amount: protein,
-            unit: "gram",
-          },
-          fat: {
-            amount: fat,
-            unit: "gram",
-          },
-          carbohydrates: {
-            amount: carboHydrates,
-            unit: "gram",
-          },
+          portion: { amount: portion, unit: portionUnit },
+          calories: KCAL,
+          protein: protein,
+          fat: fat,
+          carbohydrates: carboHydrates,
         },
         expiration_date: expirationDate.toISOString(),
       },
