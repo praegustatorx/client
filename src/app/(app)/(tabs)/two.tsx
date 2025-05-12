@@ -4,7 +4,7 @@ import { Text, View as StyledView } from "@/src/components/Themed";
 export default function TabTwoScreen() {
   return (
     <SafeAreaView className="h-[100%]">
-      <View className="flex-1 px-3">
+      <View className="flex-1 px-3 pt-10">
         <Text className="text-3xl font-extrabold">My Recipes</Text>
       </View>
     </SafeAreaView>

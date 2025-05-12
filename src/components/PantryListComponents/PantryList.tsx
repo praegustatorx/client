@@ -10,6 +10,7 @@ import SuccessIcon from "../Icons/SuccessIcon";
 import FailIcon from "../Icons/FailIcon";
 
 import { Ingredient } from "@/src/constants/Pantry";
+import ErrorScreen from "./ErrorScreen";
 import PantryItem from "./PantryItem";
 
 interface PantryListProps {
@@ -50,9 +51,6 @@ const PantryList: FC<PantryListProps> = (props) => {
             keyboardDismissMode="interactive"
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
-            ListEmptyComponent={() => (
-              <EmptyPantryList text="No items in pantry." />
-            )}
             ListHeaderComponent={() => (
               <TabTitle scrollY={scrollY} text="Pantry" />
             )}
