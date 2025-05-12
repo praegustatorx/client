@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Ingredient } from "../constants/Pantry";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -19,6 +20,38 @@ export interface RegisterCredentials {
 
 export interface ErrorResponse extends Error {
   message: string;
+}
+
+export interface SendMessage {
+  chatId: string;
+  message: string;
+}
+
+export interface MessageResponse {
+  message: string;
+}
+
+export interface SendImage {
+  image: any;
+}
+
+export interface FetchPantryResponse {
+  userId: string;
+  ingredients: Ingredient[];
+}
+
+export interface PantryItemInput {
+  brand: string;
+  category: string;
+  quantityUnit: string;
+  portionUnit: string;
+  expirationDate: string;
+  isKCAL: boolean;
+  calories: number;
+  portion: string;
+  protein: number;
+  fat: number;
+  carbohydrates: number;
 }
 
 export const login = async (
@@ -50,20 +83,10 @@ export const register = async (
     throw errorResponse;
   }
 };
-export interface SendMessage {
-  chatId: string;
-  message: string;
-}
-
-export interface MessageResponse {
-  message: string;
-}
 
 export const sendMessage = async (
   message: SendMessage
 ): Promise<MessageResponse> => {
-  console.log("actual http://10.154.252.24:8005/chat");
-  console.log(`${API_URL}/chat/`);
   try {
     const response = await axios.post(`${API_URL}/chat/`, message);
     return response.data;
@@ -76,7 +99,9 @@ export const sendMessage = async (
   }
 };
 
-export const uploadImage = async (formData: any): Promise<MessageResponse> => {
+export const uploadImage = async (
+  formData: any
+): Promise<MessageResponse> => {
   console.log("formData", formData);
   try {
     const response = await axios.post(`${API_URL}/file/upload`, formData, {
@@ -92,6 +117,73 @@ export const uploadImage = async (formData: any): Promise<MessageResponse> => {
       name: error.name,
     };
     console.log("error", errorResponse.message);
+    throw errorResponse;
+  }
+};
+
+export const fetchPantry = async (
+  userId: string
+): Promise<FetchPantryResponse> => {
+  try {
+    const path = `${API_URL}/pantry/${userId}`;
+    console.log(path, "path");
+    const response = await axios.get(path);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const fetchCookbook = async (): Promise<RegisterCredentials> => {
+  try {
+    const response = await axios.get("");
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const putIngredientInPantry = async (
+  data: PantryItemInput
+): Promise<any> => {
+  console.log("data", data);
+  try {
+    const path = `${API_URL}/pantry/user123/ingredients`;
+    const response = await axios.put(path, data);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const deleteIngredientFromPantry = async ({
+  userId,
+  pantryItemId,
+}: {
+  userId: string;
+  pantryItemId: string;
+}) => {
+  try {
+    const path = `${API_URL}/pantry/${userId}/ingredients/${pantryItemId}`;
+    const response = await axios.delete(path);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
     throw errorResponse;
   }
 };
