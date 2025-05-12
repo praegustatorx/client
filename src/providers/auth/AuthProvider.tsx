@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signIn = (email: string, password: string) => {
     setSession("cool");
-    router.push("/(app)");
+    router.replace("/(app)/(tabs)");
     LoginMutation.mutate(
       { email, password },
       {

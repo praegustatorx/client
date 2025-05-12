@@ -75,3 +75,23 @@ export const sendMessage = async (
     throw errorResponse;
   }
 };
+
+export const uploadImage = async (formData: any): Promise<MessageResponse> => {
+  console.log("formData", formData);
+  try {
+    const response = await axios.post(`${API_URL}/file/upload`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log("formData", formData);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    console.log("error", errorResponse.message);
+    throw errorResponse;
+  }
+};

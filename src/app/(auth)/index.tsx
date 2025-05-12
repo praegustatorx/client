@@ -5,7 +5,7 @@ import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import WavyBackground from "@/src/components/WaveBackground";
 import IntroductionCarousel from "@/src/components/IntroductionCarousel/IntroductionCarousel";
-import LandingPageButtonBar from "@/src/components/authComponents/LandingPageButtonBar";
+import LandingPageButtonBar from "@/src/components/AuthComponents/LandingPageButtonBar";
 
 const Index = () => {
   return (
