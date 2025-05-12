@@ -5,7 +5,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Slot } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
@@ -59,7 +59,14 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <Slot />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+              name="modal"
+              options={{
+                presentation: "modal",
+              }}
+            />
+          </Stack>
         </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>
