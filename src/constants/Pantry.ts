@@ -1,50 +1,47 @@
-interface Brand {
-  value?: string;
-}
-
 export type Unit = {
   label: string;
   value: string;
 };
 
-interface QuantityValue {
-  quantity: number;
+interface Measurement {
+  amount: string;
+  unit: string;
+}
+
+interface NutritionAmount {
+  amount: number;
   unit: string;
 }
 
 interface Quantity {
-  value: QuantityValue;
-}
-
-interface NutrientAmount {
-  amount: number;
-  unit: string;
-}
-
-interface Portion {
-  amount: number;
-  unit: string;
+  value: Measurement;
 }
 
 interface Nutrition {
-  portion: Portion;
-  calories: NutrientAmount[];
-  protein: NutrientAmount;
-  fat: NutrientAmount;
-  carbohydrates: NutrientAmount;
+  value: {
+    portion: NutritionAmount;
+    calories: NutritionAmount;
+    protein: NutritionAmount;
+    fat: NutritionAmount;
+    carbohydrates: NutritionAmount;
+  };
 }
 
 interface ExpirationDate {
   value: string;
 }
 
+type Brand = {
+  value: string;
+};
+
 interface Ingredient {
   id: string;
-  brand: Brand;
-  genericId: string;
-  quantity: Quantity;
-  nutrition: Nutrition;
-  expiration_date: ExpirationDate;
+  type: string;
+  nutrition?: Nutrition;
+  quantity?: Quantity;
+  brand?: Brand;
+  expiration_date?: ExpirationDate;
 }
 
 interface ApiResponse {
@@ -56,10 +53,7 @@ export type {
   ApiResponse,
   Ingredient,
   Nutrition,
-  NutrientAmount,
-  Quantity,
-  QuantityValue,
+  NutritionAmount as NutrientAmount,
   Brand,
-  Portion,
   ExpirationDate,
 };

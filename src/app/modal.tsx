@@ -28,14 +28,13 @@ export default function ModalScreen() {
   const [category, setCategory] = useState<string>("");
   const [quantity, setQuantity] = useState<string>("");
   const [KCAL, setKCAL] = useState<string>("");
-  const [kJ, setKj] = useState<string>("");
-  const [portion, setPortion] = useState<string>("");
+  const [portion, setPortion] = useState<string>("100");
   const [protein, setProtein] = useState<string>("");
 
   const [fat, setFat] = useState<string>("");
   const [carboHydrates, setCarboHydrates] = useState<string>("");
 
-  const [quantityUnit, setQuantityUnit] = useState<string>("Kilogram");
+  const [quantityUnit, setQuantityUnit] = useState<string>("Gram");
   const [portionUnit, setPortionUnit] = useState<string>("Gram");
   const [expirationDate, setExpirationDate] = useState(new Date());
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
@@ -60,10 +59,11 @@ export default function ModalScreen() {
       Alert.alert("Error", "Please fill out all mandatory fields.");
       return;
     }
+    console.log("DataSave", expirationDate.toISOString().split("T")[0]);
     putIngredientInPantry.mutate(
       {
-        brand: brand, // From input
-        type: category, // Category input
+        brand: brand,
+        type: category,
         quantity: {
           amount: quantity,
           unit: quantityUnit,
@@ -75,7 +75,7 @@ export default function ModalScreen() {
           fat: fat,
           carbohydrates: carboHydrates,
         },
-        expiration_date: expirationDate.toISOString(),
+        expiration_date: expirationDate.toISOString().split("T")[0],
       },
       {
         onSuccess: () => {

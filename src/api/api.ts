@@ -99,9 +99,7 @@ export const sendMessage = async (
   }
 };
 
-export const uploadImage = async (
-  formData: any
-): Promise<MessageResponse> => {
+export const uploadImage = async (formData: any): Promise<MessageResponse> => {
   console.log("formData", formData);
   try {
     const response = await axios.post(`${API_URL}/file/upload`, formData, {
@@ -184,6 +182,29 @@ export const deleteIngredientFromPantry = async ({
       message: error.response.data.message,
       name: error.name,
     };
+    throw errorResponse;
+  }
+};
+
+export const uploadImageToBePredicted = async (
+  formData: any
+): Promise<MessageResponse> => {
+  console.log("formData", formData);
+  try {
+    const path = `${API_URL}/model/predict`;
+    const response = await axios.post(path, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log("formData", formData);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    console.log("error", errorResponse.message);
     throw errorResponse;
   }
 };

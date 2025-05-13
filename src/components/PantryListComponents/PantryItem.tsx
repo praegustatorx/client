@@ -6,13 +6,15 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { Ingredient } from "@/src/constants/Pantry";
 import DeleteIcon from "../Icons/DeleteIcon";
-import { Ionicons } from "@expo/vector-icons"; // Ensure expo/vector-icons is installed
+import { FontAwesome } from "@expo/vector-icons";
 import { useDeletePantryIngredient } from "@/src/hooks/mutations/useDeletePantryIngredient";
 import { useQueryClient } from "react-query";
 import { useNotificationToast } from "@/src/providers/ToastContext";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { usePantryItem } from "@/src/providers/PantryItemContext";
 
 interface PantryItemProps {
   item: Ingredient;
@@ -22,6 +24,20 @@ const PantryItem: FC<PantryItemProps> = ({ item }) => {
   const mutation = useDeletePantryIngredient();
   const client = useQueryClient();
   const { showToast } = useNotificationToast();
+  const { setSelectedItem } = usePantryItem();
+
+  const now = new Date();
+  const isExpired = item.expiration_date?.value
+    ? new Date(item.expiration_date.value) <= now
+    : false;
+
+  const formattedDate = item.expiration_date?.value
+    ? new Date(item.expiration_date.value).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : "—";
 
   const onDeletePantryItem = (userId: string, pantryItemId: string) => {
     mutation.mutate(
@@ -46,63 +62,126 @@ const PantryItem: FC<PantryItemProps> = ({ item }) => {
     );
   };
 
+  const handlePress = () => {
+    setSelectedItem(item);
+    router.push("/(app)/(pantry)/details");
+  };
+
   return (
-    <View style={styles.card}>
-      <Link href={`/(app)/(pantry)/${item.id}`} asChild>
-        <TouchableOpacity style={styles.infoArea}>
-          <View>
-            <Text style={styles.name}>{item.brand.value}</Text>
-            <Text style={styles.expiry}>
-              Expires: {item.expiration_date.value}
+    <TouchableOpacity onPress={handlePress}>
+      <View style={styles.cardContainer}>
+        {/* Left Icon */}
+        <MaterialCommunityIcons
+          name="food-variant"
+          size={24}
+          color="#6B7280"
+          style={styles.leftIcon}
+        />
+
+        {/* Main Info */}
+        <View style={styles.middleSection}>
+          <Text style={styles.brandText}>
+            {item.brand?.value ?? "No Brand"}
+          </Text>
+          <Text style={styles.typeText}>{item.type}</Text>
+          <View style={styles.row}>
+            <FontAwesome name="calendar" size={12} color="#6B7280" />
+            <Text style={styles.itemDate}>
+              {formattedDate}
+              {isExpired && <Text style={styles.expiredText}> (Expired)</Text>}
             </Text>
           </View>
-        </TouchableOpacity>
-      </Link>
+        </View>
 
-      {mutation.isLoading ? (
-        <ActivityIndicator size="small" color="green" />
-      ) : (
-        <TouchableOpacity
-          style={styles.deleteButton}
-          onPress={() => onDeletePantryItem("user123", item.id)}
-        >
-          <DeleteIcon size={20} color={"ff6b6b"} />
-        </TouchableOpacity>
-      )}
-    </View>
+        {/* Quantity + Delete */}
+        <View style={styles.rightSection}>
+          <Text style={styles.quantity}>
+            {item.quantity?.value.amount ?? ""}
+            {item.quantity?.value.unit ?? ""}
+          </Text>
+          {mutation.isLoading ? (
+            <ActivityIndicator
+              size="small"
+              color="green"
+              style={{ marginLeft: 12 }}
+            />
+          ) : (
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => onDeletePantryItem("user123", item.id)}
+            >
+              <DeleteIcon size={20} color={"ff6b6b"} />
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "#111",
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
+  cardContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 5,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
   },
-  infoArea: {
+  expiredContainer: {
+    backgroundColor: "#FEE2E2", // Light red tint
+  },
+  leftIcon: {
+    marginRight: 10,
+  },
+  middleSection: {
     flex: 1,
   },
-  name: {
+  brandText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#fff",
-    marginBottom: 4,
+    color: "#111827",
   },
-  expiry: {
+  typeText: {
+    fontSize: 14,
+    color: "#6B7280",
+    marginTop: 2,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 4,
+    flexWrap: "wrap",
+  },
+  itemDate: {
+    fontSize: 12,
+    color: "#6B7280",
+    marginLeft: 4,
+  },
+  expiredText: {
+    color: "#DC2626", // red-600
+    fontWeight: "600",
+  },
+  rightSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    marginLeft: 12,
+  },
+  quantity: {
+    flexDirection: "row",
+    textAlign: "right",
+  },
+  amountText: {
+    fontSize: 16,
+    color: "#374151",
+  },
+  unitText: {
     fontSize: 13,
-    color: "#aaa",
-    fontStyle: "italic",
+    color: "#6B7280",
   },
   deleteButton: {
+    marginLeft: 12,
     padding: 8,
   },
 });

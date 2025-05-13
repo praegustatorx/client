@@ -4,68 +4,63 @@ import {
   StyleSheet,
   Image,
   ScrollView,
-  StatusBar,
   SafeAreaView,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
 import BackButton from "@/src/components/DetailPageComponents/Shared/BackButton";
+import { usePantryItem } from "@/src/providers/PantryItemContext";
+import NutritionTable from "@/src/components/PantryListComponents/NutritionTable";
 
 const PantryDetails = () => {
-  const { id } = useLocalSearchParams();
+  const { selectedItem } = usePantryItem();
+  console.log("selectedItem", selectedItem?.nutrition);
 
-  // mock pantry item — replace with fetch later
-  const item = {
-    id,
-    brand: "Heinz",
-    name: "Tomato Ketchup",
-    expiration: "2025-09-30",
-    quantity: "500ml",
-    image: "https://cdn-icons-png.flaticon.com/512/1046/1046784.png",
-    notes: "Store in a cool, dry place. Refrigerate after opening.",
-    nutrition: {
-      Calories: "100 kcal",
-      Fat: "0g",
-      Carbohydrates: "25g",
-      Protein: "1g",
-    },
-  };
+  if (!selectedItem) {
+    return;
+  }
+
+  const formattedDate = selectedItem?.expiration_date?.value
+    ? new Date(selectedItem.expiration_date.value).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : "—";
+
+  const { nutrition } = selectedItem;
 
   return (
     <SafeAreaView style={styles.container}>
       <BackButton />
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.iconWrapper}>
-          <Image
-            source={{ uri: item.image }}
-            style={styles.icon}
-            resizeMode="contain"
-          />
-        </View>
+        <View style={styles.iconWrapper}></View>
 
-        <Text style={styles.title}>{item.name}</Text>
-        <Text style={styles.source}>{item.brand}</Text>
+        <Text style={styles.title}>{selectedItem?.type}</Text>
+        <Text style={styles.source}>{selectedItem?.brand?.value}</Text>
 
         <View style={styles.meta}>
           <Text style={styles.metaItem}>
             QUANTITY{"\n"}
-            <Text style={styles.metaValue}>{item.quantity}</Text>
+            <Text style={styles.metaValue}>
+              {selectedItem?.quantity?.value.amount}{" "}
+              {selectedItem?.quantity?.value.unit}
+            </Text>
           </Text>
           <Text style={styles.metaItem}>
             EXPIRATION{"\n"}
-            <Text style={styles.metaValue}>{item.expiration}</Text>
+            <Text style={styles.metaValue}>{formattedDate}</Text>
           </Text>
         </View>
 
-        <Text style={styles.sectionTitle}>Storage Notes</Text>
-        <Text style={styles.description}>{item.notes}</Text>
-
         <Text style={styles.sectionTitle}>Nutritional Information</Text>
-        {Object.entries(item.nutrition).map(([key, value]) => (
-          <View key={key} style={styles.nutritionRow}>
-            <Text style={styles.nutritionKey}>{key}</Text>
-            <Text style={styles.nutritionValue}>{value}</Text>
-          </View>
-        ))}
+        {nutrition && (
+          <NutritionTable
+            calories={nutrition.value.calories.amount}
+            carbohydrates={nutrition.value.carbohydrates.amount}
+            fat={nutrition.value.fat.amount}
+            protein={nutrition.value.protein.amount}
+            portion={nutrition.value.portion.amount}
+          />
+        )}
       </ScrollView>
     </SafeAreaView>
   );

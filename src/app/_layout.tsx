@@ -15,6 +15,7 @@ import { useColorScheme } from "@/src/components/useColorScheme";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "../../global.css";
 import { NotificationToastProvider } from "../providers/ToastContext";
+import { PantryItemProvider } from "../providers/PantryItemContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -61,14 +62,16 @@ function RootLayoutNav() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <NotificationToastProvider>
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen
-                name="modal"
-                options={{
-                  presentation: "modal",
-                }}
-              />
-            </Stack>
+            <PantryItemProvider>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen
+                  name="modal"
+                  options={{
+                    presentation: "modal",
+                  }}
+                />
+              </Stack>
+            </PantryItemProvider>
           </NotificationToastProvider>
         </AuthProvider>
       </QueryClientProvider>

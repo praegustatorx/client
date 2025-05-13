@@ -12,6 +12,7 @@ import FailIcon from "../Icons/FailIcon";
 import { Ingredient } from "@/src/constants/Pantry";
 import ErrorScreen from "./ErrorScreen";
 import PantryItem from "./PantryItem";
+import PantryItem2 from "./PantryItem2";
 
 interface PantryListProps {
   onScroll: ScrollHandlerProcessed<Record<string, unknown>>;
@@ -35,7 +36,7 @@ const PantryList: FC<PantryListProps> = (props) => {
             onScroll={onScroll}
             estimatedItemSize={100}
             renderItem={({ item, index }: { item: any; index: number }) => (
-              <PantryItem item={item} key={index} />
+              <PantryItem item={item} key={item.id} />
             )}
             keyExtractor={(_, index) => index.toString()}
             contentContainerStyle={{
