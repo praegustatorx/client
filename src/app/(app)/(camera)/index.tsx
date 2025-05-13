@@ -15,6 +15,9 @@ import * as api from "@/src/api/api";
 import { router, useLocalSearchParams } from "expo-router";
 import useCamera from "@/src/hooks/useCamera";
 import useMediaLibrary from "@/src/hooks/useMediaLibrary";
+import AnalyzingOverlay from "@/src/components/CameraComponents/AnalyzingOverlay";
+import { usePicturePredictionMutation } from "@/src/hooks/mutations/usePicturePredictionMutation";
+import { usePredictedItem } from "@/src/providers/PredictedItemContext";
 const CameraScreen = () => {
   const {
     cameraRef,
@@ -28,8 +31,10 @@ const CameraScreen = () => {
     ImagePicker.ImagePickerAsset | CameraCapturedPicture | undefined
   >(undefined);
   const { launchImageLibrary } = useMediaLibrary();
+  const { mutate, isLoading } = usePicturePredictionMutation();
 
   const { mode, imageUri } = useLocalSearchParams();
+  const { setPredictedItem } = usePredictedItem();
 
   useEffect(() => {
     if (imageUri) {
@@ -42,20 +47,39 @@ const CameraScreen = () => {
     if (!image) return;
 
     if ("assetId" in image) {
-      formData.append("image", {
+      formData.append("file", {
         uri: image.uri,
         name: image.fileName,
-        type: "image",
+        type: "image/jpeg",
       } as any);
     } else {
-      formData.append("image", {
+      formData.append("file", {
         uri: image.uri,
         name: "testing",
-        type: "image",
+        type: "image/jpeg",
       } as any);
     }
 
-    api.uploadImage(formData);
+    mutate(formData, {
+      onSuccess: (data) => {
+        setPredictedItem({
+          id: "ss",
+          type: "1",
+          brand: { value: "" },
+          expiration_date: undefined,
+          nutrition: {
+            value: {
+              calories: { amount: 1, unit: "KCAL" },
+              carbohydrates: { amount: 1, unit: "KCAL" },
+              fat: { amount: 1, unit: "KCAL" },
+              portion: { amount: 1, unit: "KCAL" },
+              protein: { amount: 1, unit: "KCAL" },
+            },
+          },
+        });
+        router.replace("/modal");
+      },
+    });
   };
 
   const onRetake = () => {
@@ -64,7 +88,6 @@ const CameraScreen = () => {
 
   const onImageSelection = async () => {
     const image = await launchImageLibrary();
-
     image && setImage(image);
   };
 
@@ -83,6 +106,10 @@ const CameraScreen = () => {
         <Button onPress={requestPermission} title="Grant Permission" />
       </View>
     );
+  }
+
+  if (isLoading) {
+    return <AnalyzingOverlay />;
   }
 
   return (

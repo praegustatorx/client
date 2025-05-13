@@ -14,13 +14,14 @@ import { useDeletePantryIngredient } from "@/src/hooks/mutations/useDeletePantry
 import { useQueryClient } from "react-query";
 import { useNotificationToast } from "@/src/providers/ToastContext";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Animated, { FadeInDown } from "react-native-reanimated";
 import { usePantryItem } from "@/src/providers/PantryItemContext";
-
 interface PantryItemProps {
   item: Ingredient;
+  index: number;
 }
 
-const PantryItem: FC<PantryItemProps> = ({ item }) => {
+const PantryItem: FC<PantryItemProps> = ({ item, index }) => {
   const mutation = useDeletePantryIngredient();
   const client = useQueryClient();
   const { showToast } = useNotificationToast();
@@ -69,7 +70,10 @@ const PantryItem: FC<PantryItemProps> = ({ item }) => {
 
   return (
     <TouchableOpacity onPress={handlePress}>
-      <View style={styles.cardContainer}>
+      <Animated.View
+        style={styles.cardContainer}
+        entering={FadeInDown.duration(800).delay(index * 100)}
+      >
         {/* Left Icon */}
         <MaterialCommunityIcons
           name="food-variant"
@@ -96,7 +100,7 @@ const PantryItem: FC<PantryItemProps> = ({ item }) => {
         {/* Quantity + Delete */}
         <View style={styles.rightSection}>
           <Text style={styles.quantity}>
-            {item.quantity?.value.amount ?? ""}
+            {item.quantity?.value.amount ?? ""}{" "}
             {item.quantity?.value.unit ?? ""}
           </Text>
           {mutation.isLoading ? (
@@ -114,7 +118,7 @@ const PantryItem: FC<PantryItemProps> = ({ item }) => {
             </TouchableOpacity>
           )}
         </View>
-      </View>
+      </Animated.View>
     </TouchableOpacity>
   );
 };

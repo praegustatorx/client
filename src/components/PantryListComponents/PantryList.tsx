@@ -36,7 +36,7 @@ const PantryList: FC<PantryListProps> = (props) => {
             onScroll={onScroll}
             estimatedItemSize={100}
             renderItem={({ item, index }: { item: any; index: number }) => (
-              <PantryItem item={item} key={item.id} />
+              <PantryItem item={item} key={item.id} index={index} />
             )}
             keyExtractor={(_, index) => index.toString()}
             contentContainerStyle={{

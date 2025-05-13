@@ -5,11 +5,11 @@ import BaseButton from "@/src/components/BaseButton";
 import { useSession } from "@/src/providers/auth/AuthProvider";
 
 const Three = () => {
-  const { signOut } = useSession();
+  const { signOut, user } = useSession();
   return (
     <SafeAreaView className="h-[100%]">
       <View className="flex-1 px-3">
-        <Text className="text-3xl font-extrabold">Hello, </Text>
+        <Text className="text-3xl font-extrabold">Hello, {user?.name} </Text>
         <BaseButton
           onPress={() => signOut()}
           variant="primary"

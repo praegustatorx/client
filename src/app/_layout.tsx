@@ -15,6 +15,7 @@ import { useColorScheme } from "@/src/components/useColorScheme";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "../../global.css";
 import { NotificationToastProvider } from "../providers/ToastContext";
+import { PredictedItemProvider } from "../providers/PredictedItemContext";
 import { PantryItemProvider } from "../providers/PantryItemContext";
 
 export {
@@ -53,9 +54,9 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+const queryClient = new QueryClient();
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  const queryClient = new QueryClient();
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
@@ -63,14 +64,16 @@ function RootLayoutNav() {
         <AuthProvider>
           <NotificationToastProvider>
             <PantryItemProvider>
-              <Stack screenOptions={{ headerShown: false }}>
-                <Stack.Screen
-                  name="modal"
-                  options={{
-                    presentation: "modal",
-                  }}
-                />
-              </Stack>
+              <PredictedItemProvider>
+                <Stack screenOptions={{ headerShown: false }}>
+                  <Stack.Screen
+                    name="modal"
+                    options={{
+                      presentation: "modal",
+                    }}
+                  />
+                </Stack>
+              </PredictedItemProvider>
             </PantryItemProvider>
           </NotificationToastProvider>
         </AuthProvider>

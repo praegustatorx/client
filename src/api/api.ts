@@ -10,6 +10,10 @@ export interface LoginCredentials {
 
 export interface LoginResponse {
   token: string;
+  loginUser: {
+    name: string;
+    email: string;
+  };
 }
 
 export interface RegisterCredentials {
@@ -187,24 +191,25 @@ export const deleteIngredientFromPantry = async ({
 };
 
 export const uploadImageToBePredicted = async (
-  formData: any
-): Promise<MessageResponse> => {
-  console.log("formData", formData);
+  formData: FormData
+): Promise<any> => {
   try {
-    const path = `${API_URL}/model/predict`;
-    const response = await axios.post(path, formData, {
+    const response = await fetch(`${API_URL}/model/predict`, {
+      method: "POST",
       headers: {
         "Content-Type": "multipart/form-data",
       },
+      body: formData,
     });
-    console.log("formData", formData);
-    return response.data;
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Error processing prediction");
+    }
+
+    return result;
   } catch (error: any) {
-    const errorResponse: ErrorResponse = {
-      message: error.response.data.message,
-      name: error.name,
-    };
-    console.log("error", errorResponse.message);
-    throw errorResponse;
+    throw new Error(error.message || "Upload failed");
   }
 };

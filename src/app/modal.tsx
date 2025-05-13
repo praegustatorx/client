@@ -15,13 +15,13 @@ import { Text, View } from "@/src/components/Themed";
 import { router } from "expo-router";
 import FieldGroup from "../components/ManualPantryInsertModalComponents/FieldGroup";
 import FieldInput from "../components/ManualPantryInsertModalComponents/FieldInput";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FieldInputWithUnitControl from "../components/ManualPantryInsertModalComponents/FieldInputWithUnitControl";
 import DateInput from "../components/ManualPantryInsertModalComponents/DateInput";
 import { usePutItemIngredientMutation } from "../hooks/mutations/usePutItemIngredientMutation";
 import { useQueryClient } from "react-query";
 import ManualPantryAddModal from "../components/Modal/ManualPantryAddModal";
-import { units } from "../utils/Units";
+import { usePredictedItem } from "../providers/PredictedItemContext";
 
 export default function ModalScreen() {
   const [brand, setBrand] = useState<string>("");
@@ -48,9 +48,9 @@ export default function ModalScreen() {
 
   const checkIfSaveDisabled = () => {
     if (!category) {
-      setIsSaveDisabled(true); // Disable if category is empty
+      setIsSaveDisabled(true);
     } else {
-      setIsSaveDisabled(false); // Enable if category is filled
+      setIsSaveDisabled(false);
     }
   };
 
@@ -59,7 +59,6 @@ export default function ModalScreen() {
       Alert.alert("Error", "Please fill out all mandatory fields.");
       return;
     }
-    console.log("DataSave", expirationDate.toISOString().split("T")[0]);
     putIngredientInPantry.mutate(
       {
         brand: brand,
@@ -99,6 +98,36 @@ export default function ModalScreen() {
       }
     );
   };
+
+  const { predictedItem, clearPredictedItem } = usePredictedItem();
+
+  useEffect(() => {
+    return () => {
+      clearPredictedItem();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (predictedItem) {
+      setCategory(predictedItem.type);
+      setBrand(predictedItem.brand?.value || "");
+      setQuantity(predictedItem.quantity?.value.amount || "");
+      setQuantityUnit(predictedItem.quantity?.value.unit || "Gram");
+      setExpirationDate(
+        predictedItem.expiration_date?.value
+          ? new Date(predictedItem.expiration_date.value)
+          : new Date()
+      );
+      setCarboHydrates(
+        predictedItem.nutrition?.value.carbohydrates.amount.toString() || "0"
+      ),
+        setProtein(
+          predictedItem.nutrition?.value.protein.amount.toString() || "0"
+        );
+      setFat(predictedItem.nutrition?.value.fat.amount.toString() || "0");
+      setKCAL(predictedItem.nutrition?.value.calories.amount.toString() || "0");
+    }
+  }, [predictedItem]);
 
   return (
     <View
@@ -169,7 +198,7 @@ export default function ModalScreen() {
             />
             <FieldInput
               label={`Calories (kcal)`}
-              placeholder=" "
+              placeholder="395"
               keyboardType="number-pad"
               onChangeText={setKCAL}
               value={KCAL}
@@ -178,7 +207,7 @@ export default function ModalScreen() {
 
             <FieldInput
               label={`Protein (in grams)`}
-              placeholder=" "
+              placeholder=" 19"
               keyboardType="number-pad"
               value={protein}
               onChangeText={setProtein}
@@ -186,7 +215,7 @@ export default function ModalScreen() {
             />
             <FieldInput
               label={`Fat (in grams)`}
-              placeholder=" "
+              placeholder="38 "
               keyboardType="number-pad"
               value={fat}
               onChangeText={setFat}
@@ -194,7 +223,7 @@ export default function ModalScreen() {
             />
             <FieldInput
               label={`Carbohydrates (in grams)`}
-              placeholder=" "
+              placeholder="59"
               keyboardType="number-pad"
               value={carboHydrates}
               onChangeText={setCarboHydrates}
