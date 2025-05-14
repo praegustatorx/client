@@ -8,10 +8,28 @@ interface FieldInputProps {
   value: string | undefined;
   onChangeText: any;
   isOptional?: boolean;
+  highlight?: boolean;
 }
 const FieldInput = (props: FieldInputProps) => {
-  const { label, placeholder, keyboardType, value, onChangeText, isOptional } =
-    props;
+  const {
+    label,
+    placeholder,
+    keyboardType,
+    value,
+    onChangeText,
+    isOptional,
+    highlight,
+  } = props;
+
+  const inputStyle = [
+    styles.input,
+    highlight && {
+      borderColor: "#00C853",
+      shadowColor: "#00C853",
+      shadowOpacity: 0.5,
+      shadowRadius: 4,
+    },
+  ];
 
   return (
     <View style={styles.row}>
@@ -27,7 +45,7 @@ const FieldInput = (props: FieldInputProps) => {
       </View>
       <TextInput
         placeholder={placeholder}
-        style={styles.input}
+        style={inputStyle}
         keyboardType={keyboardType}
         autoComplete="off"
         value={value}

@@ -9,21 +9,21 @@ interface Measurement {
 }
 
 interface NutritionAmount {
-  amount: number;
-  unit: string;
+  amount?: number;
+  unit?: string;
 }
 
 interface Quantity {
-  value: Measurement;
+  value?: Measurement;
 }
 
 interface Nutrition {
   value: {
-    portion: NutritionAmount;
-    calories: NutritionAmount;
-    protein: NutritionAmount;
-    fat: NutritionAmount;
-    carbohydrates: NutritionAmount;
+    portion?: NutritionAmount;
+    calories?: NutritionAmount;
+    protein?: NutritionAmount;
+    fat?: NutritionAmount;
+    carbohydrates?: NutritionAmount;
   };
 }
 
@@ -36,7 +36,7 @@ type Brand = {
 };
 
 interface Ingredient {
-  id: string;
+  id?: string;
   type: string;
   nutrition?: Nutrition;
   quantity?: Quantity;

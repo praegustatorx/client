@@ -16,6 +16,7 @@ import { useNotificationToast } from "@/src/providers/ToastContext";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { usePantryItem } from "@/src/providers/PantryItemContext";
+import { formatDate } from "@/src/utils/FormatDate";
 interface PantryItemProps {
   item: Ingredient;
   index: number;
@@ -32,15 +33,15 @@ const PantryItem: FC<PantryItemProps> = ({ item, index }) => {
     ? new Date(item.expiration_date.value) <= now
     : false;
 
-  const formattedDate = item.expiration_date?.value
-    ? new Date(item.expiration_date.value).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      })
-    : "—";
+  const formattedDate = formatDate(item.expiration_date?.value);
 
-  const onDeletePantryItem = (userId: string, pantryItemId: string) => {
+  const onDeletePantryItem = (
+    userId: string,
+    pantryItemId: string | undefined
+  ) => {
+    if (!pantryItemId) {
+      return;
+    }
     mutation.mutate(
       { userId, pantryItemId },
       {
@@ -100,8 +101,8 @@ const PantryItem: FC<PantryItemProps> = ({ item, index }) => {
         {/* Quantity + Delete */}
         <View style={styles.rightSection}>
           <Text style={styles.quantity}>
-            {item.quantity?.value.amount ?? ""}{" "}
-            {item.quantity?.value.unit ?? ""}
+            {item.quantity?.value?.amount ?? ""}{" "}
+            {item.quantity?.value?.unit ?? ""}
           </Text>
           {mutation.isLoading ? (
             <ActivityIndicator

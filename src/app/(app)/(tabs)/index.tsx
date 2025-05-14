@@ -53,8 +53,8 @@ export default function TabOneScreen() {
     );
   }
   return (
-    <SafeAreaView className="h-[100%]">
-      <View className="flex-1 px-2">
+    <SafeAreaView className="h-[100%]" style={styles.page}>
+      <View style={styles.container}>
         <NavigationHeader scrollY={scrollY} title="Pantry" />
         <PantryList
           onScroll={scrollHandler}
@@ -69,8 +69,11 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    paddingTop: 20,
+    paddingHorizontal: 4,
+  },
+  page: {
+    flex: 1,
   },
   image: {
     width: 300,

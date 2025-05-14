@@ -7,7 +7,7 @@ import { Text } from "../Themed";
 interface QuantityFieldProps {
   setSelectedUnit: (value: string) => void;
   selectedUnit: string;
-  value: string;
+  value: string | undefined;
   setValue: any;
   label: string;
   isOptional?: boolean;

@@ -18,6 +18,7 @@ import useMediaLibrary from "@/src/hooks/useMediaLibrary";
 import AnalyzingOverlay from "@/src/components/CameraComponents/AnalyzingOverlay";
 import { usePicturePredictionMutation } from "@/src/hooks/mutations/usePicturePredictionMutation";
 import { usePredictedItem } from "@/src/providers/PredictedItemContext";
+import { useNotificationToast } from "@/src/providers/ToastContext";
 const CameraScreen = () => {
   const {
     cameraRef,
@@ -35,7 +36,7 @@ const CameraScreen = () => {
 
   const { mode, imageUri } = useLocalSearchParams();
   const { setPredictedItem } = usePredictedItem();
-
+  const { showToast } = useNotificationToast();
   useEffect(() => {
     if (imageUri) {
       setImage({ uri: imageUri } as any);
@@ -63,21 +64,16 @@ const CameraScreen = () => {
     mutate(formData, {
       onSuccess: (data) => {
         setPredictedItem({
-          id: "ss",
-          type: "1",
-          brand: { value: "" },
-          expiration_date: undefined,
+          type: data.type,
           nutrition: {
-            value: {
-              calories: { amount: 1, unit: "KCAL" },
-              carbohydrates: { amount: 1, unit: "KCAL" },
-              fat: { amount: 1, unit: "KCAL" },
-              portion: { amount: 1, unit: "KCAL" },
-              protein: { amount: 1, unit: "KCAL" },
-            },
+            value: data.info.value,
           },
         });
-        router.replace("/modal");
+        router.replace({ pathname: "/modal", params: { mode: "ai-powered" } });
+      },
+      onError: (error: any) => {
+        router.replace("/(app)/(tabs)");
+        showToast({ title: "Failed", message: error.message });
       },
     });
   };

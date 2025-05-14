@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Ingredient } from "../constants/Pantry";
+import { Ingredient, Nutrition } from "../constants/Pantry";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -56,6 +56,11 @@ export interface PantryItemInput {
   protein: number;
   fat: number;
   carbohydrates: number;
+}
+
+interface PredictedImageResponse {
+  type: string;
+  info: Nutrition;
 }
 
 export const login = async (
@@ -155,7 +160,7 @@ export const fetchCookbook = async (): Promise<RegisterCredentials> => {
 
 export const putIngredientInPantry = async (
   data: PantryItemInput
-): Promise<any> => {
+): Promise<Ingredient> => {
   console.log("data", data);
   try {
     const path = `${API_URL}/pantry/user123/ingredients`;
@@ -192,7 +197,7 @@ export const deleteIngredientFromPantry = async ({
 
 export const uploadImageToBePredicted = async (
   formData: FormData
-): Promise<any> => {
+): Promise<PredictedImageResponse> => {
   try {
     const response = await fetch(`${API_URL}/model/predict`, {
       method: "POST",
