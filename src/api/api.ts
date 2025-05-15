@@ -145,9 +145,10 @@ export const fetchPantry = async (
   }
 };
 
-export const fetchCookbook = async (): Promise<RegisterCredentials> => {
+export const fetchCookbook = async (userId: string): Promise<any> => {
+  const path = `${API_URL}/cookbook/${userId}`;
   try {
-    const response = await axios.get("");
+    const response = await axios.get(path);
     return response.data;
   } catch (error: any) {
     const errorResponse: ErrorResponse = {
