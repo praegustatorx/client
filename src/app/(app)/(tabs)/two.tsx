@@ -59,7 +59,6 @@ export default function TabTwoScreen() {
   //         image={require("@/assets/images/no-data.png")}
   //         message="Your pantry is looking a little empty! Start adding ingredients to keep track of what you have."
   //       />
-  //       <FloatingButton />
   //     </>
   //   );
   // }
