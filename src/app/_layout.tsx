@@ -5,7 +5,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Slot } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
@@ -14,6 +14,9 @@ import { useColorScheme } from "@/src/components/useColorScheme";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 import "../../global.css";
+import { NotificationToastProvider } from "../providers/ToastContext";
+import { PredictedItemProvider } from "../providers/PredictedItemContext";
+import { PantryItemProvider } from "../providers/PantryItemContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -51,15 +54,28 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+const queryClient = new QueryClient();
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  const queryClient = new QueryClient();
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <Slot />
+          <NotificationToastProvider>
+            <PantryItemProvider>
+              <PredictedItemProvider>
+                <Stack screenOptions={{ headerShown: false }}>
+                  <Stack.Screen
+                    name="modal"
+                    options={{
+                      presentation: "modal",
+                    }}
+                  />
+                </Stack>
+              </PredictedItemProvider>
+            </PantryItemProvider>
+          </NotificationToastProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>

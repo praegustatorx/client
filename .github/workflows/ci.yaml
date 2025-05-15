@@ -14,10 +14,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: latest
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install Node Modules
-        run: npm ci
+        run: npm ci --force
 
       - name: Run Tests
         run: npm test

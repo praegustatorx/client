@@ -53,30 +53,41 @@ export async function setStorageItemAsync(key: string, value: string | null) {
  * const [value, setValue] = useStorageState('myKey');
  * setValue('newValue');
  */
-export function useStorageState(key: string): UseStateHook<string> {
-  const [state, setState] = useAsyncState<string>();
+export function useStorageState<T = string>(key: string): UseStateHook<T> {
+  const [state, setState] = useAsyncState<T>();
 
   useEffect(() => {
-    if (Platform.OS === "web") {
+    const load = async () => {
       try {
-        if (typeof localStorage !== "undefined") {
-          setState(localStorage.getItem(key));
+        let rawValue: string | null = null;
+        if (Platform.OS === "web") {
+          rawValue =
+            typeof localStorage !== "undefined"
+              ? localStorage.getItem(key)
+              : null;
+        } else {
+          rawValue = await SecureStore.getItemAsync(key);
+        }
+
+        if (rawValue !== null) {
+          setState(JSON.parse(rawValue));
+        } else {
+          setState(null);
         }
       } catch (e) {
-        console.error("Local storage is unavailable:", e);
+        console.error("Failed to load or parse stored value:", e);
+        setState(null);
       }
-    } else {
-      SecureStore.getItemAsync(key).then((value) => {
-        setState(value);
-      });
-    }
+    };
+
+    load();
   }, [key]);
 
-  // Set
   const setValue = useCallback(
-    (value: string | null) => {
+    (value: T | null) => {
       setState(value);
-      setStorageItemAsync(key, value);
+      const serialized = value === null ? null : JSON.stringify(value);
+      setStorageItemAsync(key, serialized);
     },
     [key]
   );

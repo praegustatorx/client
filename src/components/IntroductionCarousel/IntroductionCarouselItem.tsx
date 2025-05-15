@@ -18,7 +18,8 @@ const IntroductionCarouselItem: FC<IntroductionCarouselItemProps> = ({
     <View style={[styles.container, { width }]}>
       <Image
         source={item.image}
-        style={[styles.image, { width, resizeMode: "contain" }]}
+        contentFit="contain"
+        style={[styles.image, { width }]}
       />
       <View style={{ flex: 0.3 }}>
         <Text style={styles.title}>{item.title}</Text>

@@ -20,7 +20,7 @@ const Index = () => {
   }, [isLoading]);
 
   if (session) {
-    return <Redirect href={"/(app)"} />;
+    return <Redirect href={"/(app)/(tabs)"} />;
   } else {
     return <Redirect href={"/(auth)"} />;
   }

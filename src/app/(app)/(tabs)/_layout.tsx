@@ -9,13 +9,39 @@ import Colors from "@/src/constants/Colors";
 import { useColorScheme } from "@/src/components/useColorScheme";
 import { useClientOnlyValue } from "@/src/components/useClientOnlyValue";
 import { useSession } from "@/src/providers/auth/AuthProvider";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
+  name: string;
   color: string;
+  library: "FontAwesome" | "MaterialCommunityIcons"; // Add a 'library' prop to specify the icon library
 }) {
-  return <FontAwesome size={20} style={{ marginBottom: -3 }} {...props} />;
+  const { name, color, library } = props;
+
+  if (library === "FontAwesome") {
+    return (
+      <FontAwesome
+        name={name as any}
+        size={20}
+        color={color}
+        style={{ marginBottom: -3 }}
+      />
+    );
+  }
+
+  if (library === "MaterialCommunityIcons") {
+    return (
+      <MaterialCommunityIcons
+        name={name as any}
+        size={20}
+        color={color}
+        style={{ marginBottom: -3 }}
+      />
+    );
+  }
+
+  return null; // In case the library is not provided or is invalid
 }
 
 export default function TabLayout() {
@@ -38,38 +64,36 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "My Pantry",
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
-          headerRight: () => (
-            <View className="flex flex-row items-center justify-center">
-              <Link href="//" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <FontAwesome
-                      name="plus"
-                      size={25}
-                      color={Colors[colorScheme ?? "light"].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
-              </Link>
-            </View>
+          headerShown: false,
+          headerShadowVisible: true,
+          title: "Pantry",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon
+              name="fridge"
+              color={color}
+              library="MaterialCommunityIcons"
+            />
           ),
         }}
       />
       <Tabs.Screen
         name="two"
         options={{
-          title: "My Recipes",
-          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
+          headerShadowVisible: true,
+          headerShown: false,
+          title: "Cookbook",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="book" color={color} library="FontAwesome" />
+          ),
         }}
       />
       <Tabs.Screen
         name="three"
         options={{
           title: "User",
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="user" color={color} library="FontAwesome" />
+          ),
         }}
       />
       <Tabs.Screen
@@ -78,10 +102,18 @@ export default function TabLayout() {
           tabBarStyle: {
             borderTopWidth: 0,
           },
-          headerShown: false,
           title: "Foodie",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="comment" color={color} />
+            <TabBarIcon name="comment" color={color} library="FontAwesome" />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="four"
+        options={{
+          title: "Developer Dash",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="dashboard" color={color} library="FontAwesome" />
           ),
         }}
       />
