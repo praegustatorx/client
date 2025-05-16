@@ -13,10 +13,13 @@ import Cook from "@/src/components/RecipeDetailsComponents/ActionButtons/Cook";
 import Share from "@/src/components/RecipeDetailsComponents/ActionButtons/Share";
 import Delete from "@/src/components/RecipeDetailsComponents/ActionButtons/Delete";
 import BackButton from "@/src/components/DetailPageComponents/Shared/BackButton";
+import { useRecipeItem } from "@/src/providers/RecipeItemContext";
 const HEADER_HEIGHT = 300;
 
 const RecipeDetails = () => {
   const { id } = useLocalSearchParams();
+  const { selectedItem } = useRecipeItem();
+
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const recipe = {
@@ -106,19 +109,8 @@ const RecipeDetails = () => {
         <View style={{ height: HEADER_HEIGHT, paddingHorizontal: 20 }} />
 
         <Text style={styles.title} id={`recipe-title-${id}`}>
-          {recipe.title}
+          {selectedItem?.name}
         </Text>
-
-        <View style={styles.meta}>
-          <Text style={styles.metaItem}>
-            TOTAL TIME{"\n"}
-            <Text style={styles.metaValue}>{recipe.time}</Text>
-          </Text>
-          <Text style={styles.metaItem}>
-            YIELD{"\n"}
-            <Text style={styles.metaValue}>{recipe.servings}</Text>
-          </Text>
-        </View>
 
         <View style={styles.actions}>
           <Cook />
@@ -129,14 +121,14 @@ const RecipeDetails = () => {
         <Text style={styles.description}>{recipe.description}</Text>
 
         <Text style={styles.sectionTitle}>Ingredients</Text>
-        {recipe.ingredients.map((item, index) => (
+        {selectedItem?.ingredients.map((item, index) => (
           <Text key={index} style={styles.listItem}>
-            • {item}
+            • {item.type}
           </Text>
         ))}
 
         <Text style={styles.sectionTitle}>Steps</Text>
-        {recipe.steps.map((step, index) => (
+        {selectedItem?.instructions.map((step, index) => (
           <Text key={index} style={styles.listItem}>
             {index + 1}. {step}
           </Text>

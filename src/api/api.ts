@@ -7,7 +7,6 @@ export interface LoginCredentials {
   email: string;
   password: string;
 }
-
 export interface LoginResponse {
   token: string;
   loginUser: {
@@ -61,6 +60,23 @@ export interface PantryItemInput {
 interface PredictedImageResponse {
   type: string;
   info: Nutrition;
+}
+
+interface RecipeDescription {
+  description: {
+    value: string;
+  };
+}
+
+export interface Recipe {
+  name: string;
+  description: RecipeDescription;
+  ingredients: Ingredient[];
+  instructions: string[];
+}
+
+export interface CookbookResponse {
+  recipes: Recipe[];
 }
 
 export const login = async (
@@ -145,7 +161,9 @@ export const fetchPantry = async (
   }
 };
 
-export const fetchCookbook = async (userId: string): Promise<any> => {
+export const fetchCookbook = async (
+  userId: string
+): Promise<CookbookResponse> => {
   const path = `${API_URL}/cookbook/${userId}`;
   try {
     const response = await axios.get(path);
@@ -196,6 +214,20 @@ export const deleteIngredientFromPantry = async ({
   }
 };
 
+export const addRecipe = async (userId: string, data: Recipe) => {
+  console.log("data", data);
+  const path = `${API_URL}/cookbook/${userId}/recipes`;
+  try {
+    const response = await axios.post(path, data);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
 export const uploadImageToBePredicted = async (
   formData: FormData
 ): Promise<PredictedImageResponse> => {
