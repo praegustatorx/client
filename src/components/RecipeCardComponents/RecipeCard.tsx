@@ -5,6 +5,7 @@ import { Image } from "expo-image";
 import Animated, { FadeInRight, FadeInLeft } from "react-native-reanimated";
 import { Recipe } from "@/src/api/api";
 import { useRecipeItem } from "@/src/providers/RecipeItemContext";
+
 interface RecipeCardProps {
   item: Recipe;
   width: number;
@@ -37,7 +38,6 @@ const RecipeCard: FC<RecipeCardProps> = ({ item, width, index }) => {
           contentFit="contain"
         />
 
-        {/* Tag Row */}
         <View
           style={{
             flexDirection: "row",
@@ -47,17 +47,12 @@ const RecipeCard: FC<RecipeCardProps> = ({ item, width, index }) => {
             paddingTop: 6,
           }}
         >
-          <Text style={{ fontWeight: "bold", fontSize: 12 }}>REAL SIMPLE</Text>
           <Text style={{ fontSize: 12, color: "#555" }}>RECIPE</Text>
         </View>
 
         <Text style={styles.recipeTitle} numberOfLines={2}>
           {item.name || "Recipe Title Placeholder"}
         </Text>
-
-        <View style={styles.footer}>
-          <Text style={{ fontSize: 12, color: "#555" }}>20m</Text>
-        </View>
       </Animated.View>
     </TouchableOpacity>
   );
@@ -69,11 +64,12 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowColor: "green", // 👈 green glow
+    shadowOffset: { width: 2, height: 3 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 6,
+    minHeight: 260,
   },
   image: {
     height: 200,
@@ -84,6 +80,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingHorizontal: 8,
     paddingTop: 4,
+    lineHeight: 18,
+    maxHeight: 20,
+    overflow: "hidden",
   },
   footer: {
     flexDirection: "row",

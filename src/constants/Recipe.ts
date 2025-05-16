@@ -18,7 +18,7 @@ export interface Recipe {
   description: string;
   ingredients: Ingredient[];
   instructions: string[];
-  tags: Tag[];
+  tags?: Tag[];
 }
 
 export interface RecipePayload {
@@ -26,5 +26,5 @@ export interface RecipePayload {
   description: string;
   ingredients: Ingredient[];
   instructions: string[];
-  tags: Tag[];
+  tags?: Tag[];
 }

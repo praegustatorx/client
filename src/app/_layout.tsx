@@ -18,6 +18,7 @@ import { NotificationToastProvider } from "../providers/ToastContext";
 import { PredictedItemProvider } from "../providers/PredictedItemContext";
 import { PantryItemProvider } from "../providers/PantryItemContext";
 import { RecipeItemProvider } from "../providers/RecipeItemContext";
+import { RecipeCardsProvider } from "../providers/RecipeCardsContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -65,18 +66,20 @@ function RootLayoutNav() {
         <AuthProvider>
           <NotificationToastProvider>
             <RecipeItemProvider>
-              <PantryItemProvider>
-                <PredictedItemProvider>
-                  <Stack screenOptions={{ headerShown: false }}>
-                    <Stack.Screen
-                      name="modal"
-                      options={{
-                        presentation: "modal",
-                      }}
-                    />
-                  </Stack>
-                </PredictedItemProvider>
-              </PantryItemProvider>
+              <RecipeCardsProvider>
+                <PantryItemProvider>
+                  <PredictedItemProvider>
+                    <Stack screenOptions={{ headerShown: false }}>
+                      <Stack.Screen
+                        name="modal"
+                        options={{
+                          presentation: "modal",
+                        }}
+                      />
+                    </Stack>
+                  </PredictedItemProvider>
+                </PantryItemProvider>
+              </RecipeCardsProvider>
             </RecipeItemProvider>
           </NotificationToastProvider>
         </AuthProvider>

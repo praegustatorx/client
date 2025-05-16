@@ -17,52 +17,10 @@ import { useRecipeItem } from "@/src/providers/RecipeItemContext";
 const HEADER_HEIGHT = 300;
 
 const RecipeDetails = () => {
-  const { id } = useLocalSearchParams();
   const { selectedItem } = useRecipeItem();
+  console.log("selectedItem", selectedItem);
 
   const scrollY = useRef(new Animated.Value(0)).current;
-
-  const recipe = {
-    id,
-    title: "Creamy Mustard Shallot Chicken",
-    author: "By Rachel Gurjar",
-    time: "45 min",
-    servings: "2 servings",
-    description:
-      "This weeknight one-skillet recipe features creamy mustard chicken breasts in a velvety sauce with Dijon, thyme, and a hint of turmeric.",
-    image: "https://via.placeholder.com/500x600.png?text=Recipe+Image",
-    ingredients: [
-      "2 chicken breasts",
-      "2 shallots, sliced",
-      "1 tbsp Dijon mustard",
-      "1/2 tsp turmeric",
-      "1/2 cup heavy cream",
-      "Fresh thyme",
-      "Salt & pepper to taste",
-    ],
-    steps: [
-      "Heat skillet and sear chicken until golden brown.",
-      "Add shallots and sauté until translucent.",
-      "Stir in mustard, turmeric, and cream.",
-      "Simmer until sauce thickens and chicken is cooked through.",
-      "Garnish with fresh thyme and serve.",
-      "Heat skillet and sear chicken until golden brown.",
-      "Add shallots and sauté until translucent.",
-      "Stir in mustard, turmeric, and cream.",
-      "Simmer until sauce thickens and chicken is cooked through.",
-      "Garnish with fresh thyme and serve.",
-      "Heat skillet and sear chicken until golden brown.",
-      "Add shallots and sauté until translucent.",
-      "Stir in mustard, turmeric, and cream.",
-      "Simmer until sauce thickens and chicken is cooked through.",
-      "Garnish with fresh thyme and serve.",
-      "Heat skillet and sear chicken until golden brown.",
-      "Add shallots and sauté until translucent.",
-      "Stir in mustard, turmeric, and cream.",
-      "Simmer until sauce thickens and chicken is cooked through.",
-      "Garnish with fresh thyme and serve.",
-    ],
-  };
 
   const headerOpacity = scrollY.interpolate({
     inputRange: [0, HEADER_HEIGHT / 2, HEADER_HEIGHT],
@@ -108,7 +66,7 @@ const RecipeDetails = () => {
       >
         <View style={{ height: HEADER_HEIGHT, paddingHorizontal: 20 }} />
 
-        <Text style={styles.title} id={`recipe-title-${id}`}>
+        <Text style={styles.title} id={`recipe-title-${selectedItem?.name}`}>
           {selectedItem?.name}
         </Text>
 
@@ -117,15 +75,27 @@ const RecipeDetails = () => {
           <Share />
           <Delete />
         </View>
-
-        <Text style={styles.description}>{recipe.description}</Text>
+        <Text style={styles.sectionTitle}>Description</Text>
+        <Text style={styles.description}>
+          {selectedItem?.description.value}
+        </Text>
 
         <Text style={styles.sectionTitle}>Ingredients</Text>
-        {selectedItem?.ingredients.map((item, index) => (
-          <Text key={index} style={styles.listItem}>
-            • {item.type}
-          </Text>
-        ))}
+        {selectedItem?.ingredients.map((item, index) => {
+          const type =
+            item.type?.replace(/-\d+$/, "").replace(/-/g, " ") ||
+            "Unknown ingredient";
+          const quantity = item.quantity?.value?.amount;
+          const unit = item.quantity?.value?.unit;
+          const hasQuantity = quantity !== undefined && unit !== undefined;
+
+          return (
+            <Text key={index} style={styles.listItem}>
+              • {type.charAt(0).toUpperCase() + type.slice(1)}
+              {hasQuantity ? ` – ${quantity} ${unit}` : " – quantity to taste"}
+            </Text>
+          );
+        })}
 
         <Text style={styles.sectionTitle}>Steps</Text>
         {selectedItem?.instructions.map((step, index) => (

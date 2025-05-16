@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Ingredient, Nutrition } from "../constants/Pantry";
+import { RecipePayload } from "../constants/Recipe";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -31,7 +32,8 @@ export interface SendMessage {
 }
 
 export interface MessageResponse {
-  message: string;
+  text: string;
+  json?: RecipePayload[];
 }
 
 export interface SendImage {
@@ -63,9 +65,7 @@ interface PredictedImageResponse {
 }
 
 interface RecipeDescription {
-  description: {
-    value: string;
-  };
+  value: string;
 }
 
 export interface Recipe {
@@ -214,7 +214,7 @@ export const deleteIngredientFromPantry = async ({
   }
 };
 
-export const addRecipe = async (userId: string, data: Recipe) => {
+export const addRecipe = async (userId: string, data: RecipePayload) => {
   console.log("data", data);
   const path = `${API_URL}/cookbook/${userId}/recipes`;
   try {

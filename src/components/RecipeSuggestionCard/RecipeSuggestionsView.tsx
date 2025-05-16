@@ -20,9 +20,10 @@ import { dummyCards, Card } from "./Constants";
 import { useAddRecipeMutation } from "@/src/hooks/mutations/useAddRecipeMutations";
 import { useSession } from "@/src/providers/auth/AuthProvider";
 import { Recipe } from "@/src/constants/Recipe";
-import { dummyRecipes } from "@/src/utils/DummyData/dummyRecipes";
 import { useNotificationToast } from "@/src/providers/ToastContext";
 import { Redirect } from "expo-router";
+import { useRecipeCardsContext } from "@/src/providers/RecipeCardsContext";
+import { useQueryClient } from "react-query";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.25;
@@ -32,8 +33,12 @@ const RESET_DURATION = 300;
 const RecipeSuggestionsCard = () => {
   const { user } = useSession();
   const { mutate } = useAddRecipeMutation(user!.email);
-  const [cards, setCards] = useState<Recipe[]>(dummyRecipes);
   const { showToast } = useNotificationToast();
+  const { recipeCards: cards, setRecipeCards } = useRecipeCardsContext();
+  const queryClient = useQueryClient();
+  if (!cards) {
+    return;
+  }
 
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
@@ -53,15 +58,19 @@ const RecipeSuggestionsCard = () => {
 
       if (action === "LIKED") {
         console.log("action", action, cards[0]);
-        mutate(cards[0], {
-          onSuccess: () => {
-            showToast({ message: "", title: "Recipe added to cookbook!" });
-          },
-        });
+        mutate(
+          { ...cards[0], tags: [] },
+          {
+            onSuccess: () => {
+              showToast({ message: "", title: "Recipe added to cookbook!" });
+              queryClient.invalidateQueries("cookbook");
+            },
+          }
+        );
       }
 
       if (cards.length > 0) {
-        setCards((pre) => pre.slice(1));
+        setRecipeCards((pre) => pre.slice(1));
         translateX.value = 0;
         translateY.value = 0;
 

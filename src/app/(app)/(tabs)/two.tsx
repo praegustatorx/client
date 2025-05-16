@@ -76,6 +76,7 @@ export default function TabTwoScreen() {
           keyExtractor={(item: any) => item.id}
           estimatedItemSize={50}
           numColumns={2}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item, index }: { item: any; index: number }) => (
             <RecipeCard item={item} width={width} index={index} />
           )}
