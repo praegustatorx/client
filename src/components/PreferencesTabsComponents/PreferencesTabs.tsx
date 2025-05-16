@@ -1,19 +1,9 @@
-import { useState } from "react";
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  FlatList,
-  Dimensions,
-  Text,
-} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Dimensions, Text, View } from "react-native";
+import { useState } from "react";
 import { dummyPreferences } from "@/src/utils/DummyData/dummyPreferences";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import AllergiesTab from "@/src/components/PreferencesTabsComponents/AllergiesTab";
-import DietsTab from "@/src/components/PreferencesTabsComponents/DietsTab";
-import BlacklistTab from "@/src/components/PreferencesTabsComponents/BlacklistTab";
-import Colors from "@/src/constants/Colors";
+import AllergiesTab from "./AllergiesTab";
 
 const PreferencesTabs = () => {
   const insets = useSafeAreaInsets();
@@ -41,30 +31,12 @@ const PreferencesTabs = () => {
         renderScene={renderScene}
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
-        
         renderTabBar={(props) => (
           <TabBar
             {...props}
-            indicatorStyle={{ backgroundColor: "none" }}
-            style={{
-              backgroundColor: "#f9f9f9",
-              margin: 10,
-              borderRadius: 25,
-
-              shadowColor: Colors.light.tint,
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 6,
-              elevation: 5,
-            }}
-            tabStyle={{
-              borderRadius: 12,
-            }}
-            activeColor={Colors.light.tint}
-            inactiveColor="black"
-            bounces
-
-            />
+            indicatorStyle={{ backgroundColor: "green" }}
+            // labelStyle={{ color: "black", fontWeight: "600" }}
+          />
         )}
       />
     </View>

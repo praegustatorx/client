@@ -75,7 +75,6 @@ const PantryItem: FC<PantryItemProps> = ({ item, index }) => {
         style={styles.cardContainer}
         entering={FadeInDown.duration(800).delay(index * 100)}
       >
-        {/* Left Icon */}
         <MaterialCommunityIcons
           name="food-variant"
           size={24}
@@ -83,7 +82,6 @@ const PantryItem: FC<PantryItemProps> = ({ item, index }) => {
           style={styles.leftIcon}
         />
 
-        {/* Main Info */}
         <View style={styles.middleSection}>
           <Text style={styles.brandText}>
             {item.brand?.value ?? "No Brand"}
@@ -134,7 +132,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#E5E7EB",
   },
   expiredContainer: {
-    backgroundColor: "#FEE2E2", // Light red tint
+    backgroundColor: "#FEE2E2",
   },
   leftIcon: {
     marginRight: 10,

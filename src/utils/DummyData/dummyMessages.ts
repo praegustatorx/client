@@ -1,6 +1,4 @@
-import { Message } from "./Interfaces";
-
-export const dummyMessages: Message[] = [
+export const dummyMessages: any[] = [
   {
     role: "User",
     content: "Hello, how are you?",
