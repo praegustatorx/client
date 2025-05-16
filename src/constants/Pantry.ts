@@ -3,7 +3,7 @@ export type Unit = {
   value: string;
 };
 
-interface Measurement {
+export interface Measurement {
   amount: string;
   unit: string;
 }

@@ -17,6 +17,12 @@ import {
   withTiming,
 } from "react-native-reanimated";
 import { dummyCards, Card } from "./Constants";
+import { useAddRecipeMutation } from "@/src/hooks/mutations/useAddRecipeMutations";
+import { useSession } from "@/src/providers/auth/AuthProvider";
+import { Recipe } from "@/src/constants/Recipe";
+import { dummyRecipes } from "@/src/utils/DummyData/dummyRecipes";
+import { useNotificationToast } from "@/src/providers/ToastContext";
+import { Redirect } from "expo-router";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.25;
@@ -24,7 +30,10 @@ const SWIPE_OUT_DURATION = 250;
 const RESET_DURATION = 300;
 
 const RecipeSuggestionsCard = () => {
-  const [cards, setCards] = useState<Card[]>(dummyCards);
+  const { user } = useSession();
+  const { mutate } = useAddRecipeMutation(user!.email);
+  const [cards, setCards] = useState<Recipe[]>(dummyRecipes);
+  const { showToast } = useNotificationToast();
 
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
@@ -42,7 +51,14 @@ const RecipeSuggestionsCard = () => {
       const action =
         direction === "right" || direction == "up" ? "LIKED" : "DISLIKED";
 
-      console.log("action", action);
+      if (action === "LIKED") {
+        console.log("action", action, cards[0]);
+        mutate(cards[0], {
+          onSuccess: () => {
+            showToast({ message: "", title: "Recipe added to cookbook!" });
+          },
+        });
+      }
 
       if (cards.length > 0) {
         setCards((pre) => pre.slice(1));
@@ -131,7 +147,7 @@ const RecipeSuggestionsCard = () => {
   ).current;
 
   const cardRenderer = useCallback(
-    (card: Card, index: number) => {
+    (card: Recipe, index: number) => {
       return (
         <CardView
           key={index}
@@ -154,27 +170,21 @@ const RecipeSuggestionsCard = () => {
     ]
   );
 
+  if (cards?.length === 0) {
+    return <Redirect href={"/(app)/(tabs)"} />;
+  }
+
   return (
     <View style={styles.cotntainer}>
-      {cards?.length === 0 ? (
-        <>
-          <View style={styles.emptyContainer}>
-            <Text>nada</Text>
-          </View>
-        </>
-      ) : (
-        <>
-          {cards.map(cardRenderer).reverse()}
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.btn} onPress={handleDislike}>
-              <Feather name="x" size={24} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btn} onPress={handleLike}>
-              <AntDesign name="heart" size={24} color="red" />
-            </TouchableOpacity>
-          </View>
-        </>
-      )}
+      {cards.map(cardRenderer).reverse()}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.btn} onPress={handleDislike}>
+          <Feather name="x" size={24} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn} onPress={handleLike}>
+          <AntDesign name="heart" size={24} color="red" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

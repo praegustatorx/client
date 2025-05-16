@@ -10,9 +10,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Card } from "./Constants";
+import { Recipe } from "@/src/constants/Recipe";
 
 interface CardViewProps {
-  card: Card;
+  card: Recipe;
   index: number;
   totalCards: number;
   panHandlers: any;
@@ -101,14 +102,11 @@ export default function CardView(props: CardViewProps) {
   return (
     <Animated.View style={[styles.card, animationStyle]} {...panHandlers}>
       <View style={styles.content}>
-        <Text style={styles.title}>{card.title}</Text>
+        <Text style={styles.title}>{card.name}</Text>
         <Text style={styles.description} numberOfLines={3}>
           {card.description}
         </Text>
-        <View style={styles.metaContainer}>
-          <Text style={styles.metaText}>⏱ {card.cookTime} mins</Text>
-          <Text style={styles.metaText}> {card.difficulty}</Text>
-        </View>
+        <View style={styles.metaContainer}></View>
       </View>
     </Animated.View>
   );

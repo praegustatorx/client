@@ -1,10 +1,11 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { Ingredient as any } from "@/src/constants/Pantry";
+import { Recipe } from "../api/api";
 
 //TODO REPLACE ANY WITH RECIPE TYPE
 
 interface PantryItemContextType {
-  selectedItem: any | null;
+  selectedItem: Recipe | null;
   setSelectedItem: (item: any) => void;
 }
 
@@ -12,7 +13,7 @@ const PantryItemContext = createContext<PantryItemContextType | undefined>(
   undefined
 );
 
-export const PantryItemProvider = ({ children }: { children: ReactNode }) => {
+export const RecipeItemProvider = ({ children }: { children: ReactNode }) => {
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
   return (
@@ -22,7 +23,7 @@ export const PantryItemProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const usePantryItem = () => {
+export const useRecipeItem = () => {
   const context = useContext(PantryItemContext);
   if (!context) {
     throw new Error("usePantryItem must be used within a PantryItemProvider");
