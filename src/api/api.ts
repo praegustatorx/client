@@ -218,3 +218,103 @@ export const uploadImageToBePredicted = async (
     throw new Error(error.message || "Upload failed");
   }
 };
+
+//  // ---- Fetch preferences
+//  const { data, isLoading } = useQuery({
+//   queryKey: ["preferences", email],
+//   queryFn: async () => {
+//     const res = await axios.get(`${API_URL}/preferences/${email}`);
+//     return res.data;
+//   },
+// });
+
+// const refresh = () => queryClient.invalidateQueries(["preferences", email]);
+
+// ---- Mutations
+
+export const addAllergy = async (userId: string, allergy: string) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/allergies`;
+    const response = await axios.post(path, allergy);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const deleteAllergy = async (userId: string, allergy: string) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/allergies/${allergy}`;
+    const response = await axios.delete(path);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const addDiet = async (
+  userId: string,
+  diet: { name: string; description: string }
+) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/diets`;
+    const response = await axios.post(path, diet);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const deleteDiet = async (userId: string, dietName: string) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/diets/${dietName}`;
+    const response = await axios.delete(path);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const addBlacklist = async (userId: string, ingredient: string) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/blacklist`;
+    const response = await axios.post(path, ingredient);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const deleteBlacklist = async (userId: string, ingredient: string) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/diets/${ingredient}`;
+    const response = await axios.delete(path);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
