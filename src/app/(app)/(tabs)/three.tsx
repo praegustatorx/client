@@ -1,25 +1,6 @@
-import { SafeAreaView } from "react-native";
-import { View } from "react-native";
-import { Text } from "@/src/components/Themed";
-import BaseButton from "@/src/components/BaseButton";
-import { useSession } from "@/src/providers/auth/AuthProvider";
+import PreferencesTabs from "@/src/components/PreferenceTabs";
 
-const Three = () => {
-  const { signOut, user } = useSession();
-  return (
-    <SafeAreaView className="h-[100%]">
-      <View className="flex-1 px-3">
-        <Text className="text-3xl font-extrabold">Hello, {user?.name} </Text>
-        <BaseButton
-          onPress={() => signOut()}
-          variant="primary"
-          size="sm"
-          testID="sign-up-button"
-        >
-          Log Out
-        </BaseButton>
-      </View>
-    </SafeAreaView>
-  );
+const three = () => {
+  return <PreferencesTabs />;
 };
-export default Three;
+export default three;

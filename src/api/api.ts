@@ -253,6 +253,54 @@ export const uploadImageToBePredicted = async (
   }
 };
 
+export const addAllergy = async (userId: string, allergy: string) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/allergies`;
+    const response = await axios.post(path, { allergy: allergy });
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const deleteAllergy = async (userId: string, allergy: string) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/allergies/${allergy}`;
+    const response = await axios.delete(path);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const addDiet = async (
+  userId: string,
+  diet: { name: string; description: string }
+) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/diets`;
+    const response = await axios.post(path, diet);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const deleteDiet = async (userId: string, dietName: string) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/diets/${dietName}`;
 export const deleteRecipeFromCookbook = async (
   recipeId: string,
   userId: string
@@ -260,6 +308,49 @@ export const deleteRecipeFromCookbook = async (
   try {
     const path = `${API_URL}/cookbook/${userId}/recipes/${recipeId}`;
     const response = await axios.delete(path);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const addBlacklist = async (userId: string, ingredient: string) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/blacklist`;
+    const response = await axios.post(path, { ingredient });
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const deleteBlacklist = async (userId: string, ingredient: string) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/blacklist/${ingredient}`;
+    const response = await axios.delete(path);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const fetchPreferences = async (userId: string): Promise<any> => {
+  try {
+    const path = `${API_URL}/preferences/${userId}`;
+    const response = await axios.get(path);
+    console.log("pi6ka");
     return response.data;
   } catch (error: any) {
     const errorResponse: ErrorResponse = {
