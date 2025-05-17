@@ -1,10 +1,13 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import * as api from "../../api/api";
+import { MessageResponse, ErrorResponse } from "../../api/api";
 
 export const useDeletePantryIngredient = () => {
   return useMutation<
-    api.MessageResponse,
-    Error,
+    MessageResponse,
+    ErrorResponse,
     { userId: string; pantryItemId: string }
-  >(api.deleteIngredientFromPantry);
+  >({
+    mutationFn: api.deleteIngredientFromPantry,
+  });
 };

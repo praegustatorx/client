@@ -2,7 +2,7 @@
 
 import axios, { all } from "axios";
 import * as api from "../../api/api";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 // this approach is so much bettter, should have done this earlier.
 export const usePreferenceMutations = (userId: string) => {
   const queryClient = useQueryClient();

@@ -5,9 +5,8 @@ import { render, fireEvent } from "@testing-library/react-native";
 import { usePreferenceMutations } from "@/src/hooks/mutations/usePreferenceMutations";
 import { useSession } from "@/src/providers/auth/AuthProvider";
 import { useNotificationToast } from "@/src/providers/ToastContext";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import DietsTab from "@/src/components/PreferencesTabsComponents/DietsTab";
-
 
 jest.mock("@/src/hooks/mutations/usePreferenceMutations", () => ({
   usePreferenceMutations: jest.fn(),
@@ -21,8 +20,8 @@ jest.mock("@/src/providers/ToastContext", () => ({
   useNotificationToast: jest.fn(),
 }));
 
-jest.mock("react-query", () => {
-  const actual = jest.requireActual("react-query");
+jest.mock("@tanstack/react-query", () => {
+  const actual = jest.requireActual("@tanstack/react-query");
   return {
     ...actual,
     useQueryClient: jest.fn(),
@@ -88,9 +87,6 @@ describe("DietsTab", () => {
     const deleteButton = getByTestId("delete-Vegan");
     fireEvent.press(deleteButton);
     expect(deleteDietMock).toHaveBeenCalledTimes(1);
-    expect(deleteDietMock).toHaveBeenCalledWith(
-      "Vegan",
-      expect.any(Object)
-    );
+    expect(deleteDietMock).toHaveBeenCalledWith("Vegan", expect.any(Object));
   });
 });

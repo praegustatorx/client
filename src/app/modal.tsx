@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import FieldInputWithUnitControl from "../components/ManualPantryInsertModalComponents/FieldInputWithUnitControl";
 import DateInput from "../components/ManualPantryInsertModalComponents/DateInput";
 import { usePutItemIngredientMutation } from "../hooks/mutations/usePutItemIngredientMutation";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import ManualPantryAddModal from "../components/Modal/ManualPantryAddModal";
 import { usePredictedItem } from "../providers/PredictedItemContext";
 import AIBanner from "../components/ManualPantryInsertModalComponents/AIBanner";
@@ -78,7 +78,7 @@ export default function ModalScreen() {
       {
         onSuccess: () => {
           isErrorRef.current = false;
-          queryClient.invalidateQueries(["pantryItems"]);
+          queryClient.invalidateQueries({ queryKey: ["pantryItems"] });
           setNotificationModalVisible(true);
 
           setTimeout(() => {

@@ -12,7 +12,7 @@ import { useEffect } from "react";
 import { AuthProvider } from "../providers/auth/AuthProvider";
 import { useColorScheme } from "@/src/components/useColorScheme";
 
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "../../global.css";
 import { NotificationToastProvider } from "../providers/ToastContext";
 import { PredictedItemProvider } from "../providers/PredictedItemContext";

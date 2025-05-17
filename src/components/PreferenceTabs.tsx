@@ -6,7 +6,7 @@ import AllergiesTab from "@/src/components/PreferencesTabsComponents/AllergiesTa
 import DietsTab from "@/src/components/PreferencesTabsComponents/DietsTab";
 import BlacklistTab from "@/src/components/PreferencesTabsComponents/BlacklistTab";
 import Colors from "@/src/constants/Colors";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useSession } from "@/src/providers/auth/AuthProvider";
 import { fetchPreferences } from "@/src/api/api";
 import { Preference } from "@/src/constants/Preferences";

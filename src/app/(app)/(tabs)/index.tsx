@@ -4,7 +4,7 @@ import {
   useAnimatedScrollHandler,
   useSharedValue,
 } from "react-native-reanimated";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchPantry, FetchPantryResponse } from "@/src/api/api";
 import PantryList from "@/src/components/PantryListComponents/PantryList";
 import EmptyPantryList from "@/src/components/PantryListComponents/EmptyPantryList";

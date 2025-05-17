@@ -8,7 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 import NavigationHeader from "@/src/components/NavigationHeader/NavigationHeader";
 import MessageScreen from "@/src/components/PantryListComponents/MessageScreen";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { CookbookResponse, fetchCookbook } from "@/src/api/api";
 import ErrorScreen from "@/src/components/PantryListComponents/ErrorScreen";
 import LoadingScreen from "@/src/components/Shared/LoadingScreen";
@@ -31,7 +31,6 @@ export default function TabTwoScreen() {
     queryKey: ["cookbook"],
     queryFn: () => fetchCookbook(user!.email), // TODO: remove hardcoding
   });
-
 
   const scrollY = useSharedValue(0);
 

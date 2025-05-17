@@ -11,7 +11,7 @@ import { Ingredient } from "@/src/constants/Pantry";
 import DeleteIcon from "../Icons/DeleteIcon";
 import { FontAwesome } from "@expo/vector-icons";
 import { useDeletePantryIngredient } from "@/src/hooks/mutations/useDeletePantryIngredient";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNotificationToast } from "@/src/providers/ToastContext";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Animated, { FadeInDown } from "react-native-reanimated";
@@ -35,6 +35,10 @@ const PantryItem: FC<PantryItemProps> = ({ item, index }) => {
 
   const formattedDate = formatDate(item.expiration_date?.value);
 
+  const refresh = () => {
+    client.invalidateQueries({ queryKey: ["pantryItems"] });
+  };
+
   const onDeletePantryItem = (
     userId: string,
     pantryItemId: string | undefined
@@ -46,7 +50,7 @@ const PantryItem: FC<PantryItemProps> = ({ item, index }) => {
       { userId, pantryItemId },
       {
         onSuccess: () => {
-          client.invalidateQueries("pantryItems");
+          refresh();
           showToast({
             title: "Item Deleted",
             message: "Item has been deleted from the pantry",
@@ -101,7 +105,7 @@ const PantryItem: FC<PantryItemProps> = ({ item, index }) => {
             {item.quantity?.value?.amount ?? ""}{" "}
             {item.quantity?.value?.unit ?? ""}
           </Text>
-          {mutation.isLoading ? (
+          {mutation.isPending ? (
             <ActivityIndicator
               size="small"
               color="green"
@@ -161,7 +165,7 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   expiredText: {
-    color: "#DC2626", // red-600
+    color: "#DC2626",
     fontWeight: "600",
   },
   rightSection: {

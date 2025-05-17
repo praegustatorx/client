@@ -7,7 +7,7 @@ import List from "./List";
 import AllergyDropdown from "./AllergyDropDown";
 import { usePreferenceMutations } from "@/src/hooks/mutations/usePreferenceMutations";
 import { useSession } from "@/src/providers/auth/AuthProvider";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNotificationToast } from "@/src/providers/ToastContext";
 
 interface AllergiesTabProps {
@@ -26,7 +26,7 @@ const AllergiesTab: FC<AllergiesTabProps> = (props) => {
   const onDelete = (item: string) => {
     deleteAllergy.mutate(item, {
       onSuccess: () => {
-        client.invalidateQueries("preferences");
+        client.invalidateQueries({ queryKey: ["preferences"] });
         showToast({
           message: "Allergy removed.",
           title: "Success",

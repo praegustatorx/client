@@ -23,7 +23,7 @@ import { Recipe } from "@/src/constants/Recipe";
 import { useNotificationToast } from "@/src/providers/ToastContext";
 import { Redirect } from "expo-router";
 import { useRecipeCardsContext } from "@/src/providers/RecipeCardsContext";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.25;
@@ -35,7 +35,7 @@ const RecipeSuggestionsCard = () => {
   const { mutate } = useAddRecipeMutation(user!.email);
   const { showToast } = useNotificationToast();
   const { recipeCards: cards, setRecipeCards } = useRecipeCardsContext();
-  const queryClient = useQueryClient();
+  const client = useQueryClient();
   if (!cards) {
     return;
   }
@@ -63,7 +63,7 @@ const RecipeSuggestionsCard = () => {
           {
             onSuccess: () => {
               showToast({ message: "", title: "Recipe added to cookbook!" });
-              queryClient.invalidateQueries("cookbook");
+              client.invalidateQueries({ queryKey: ["cookbook"] });
             },
           }
         );

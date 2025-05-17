@@ -13,7 +13,7 @@ import DietModal from "./DietModal";
 import { useSession } from "@/src/providers/auth/AuthProvider";
 import { usePreferenceMutations } from "@/src/hooks/mutations/usePreferenceMutations";
 import { Diet } from "@/src/constants/Preferences";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNotificationToast } from "@/src/providers/ToastContext";
 import DeleteIcon from "../Icons/DeleteIcon";
 
@@ -27,12 +27,16 @@ const DietsTab: FC<DietsTabProps> = ({ diets }) => {
   const { showToast } = useNotificationToast();
   const client = useQueryClient();
 
+  const refresh = () => {
+    client.invalidateQueries({ queryKey: ["preferences"] });
+  };
+
   const onSubmit = (name: string, description: string) => {
     addDiet.mutate(
       { name, description },
       {
         onSuccess: () => {
-          client.invalidateQueries("preferences");
+          refresh();
           showToast({ message: "New diet added.", title: "Success" });
         },
       }
@@ -43,7 +47,7 @@ const DietsTab: FC<DietsTabProps> = ({ diets }) => {
     const { name } = item;
     deleteDiet.mutate(name, {
       onSuccess: () => {
-        client.invalidateQueries("preferences");
+        refresh();
         showToast({ message: "Diet deleted.", title: "Success" });
       },
     });

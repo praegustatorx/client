@@ -12,7 +12,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Colors from "@/src/constants/Colors";
 import { useSession } from "@/src/providers/auth/AuthProvider";
 import { usePreferenceMutations } from "@/src/hooks/mutations/usePreferenceMutations";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNotificationToast } from "@/src/providers/ToastContext";
 
 type Props = {
@@ -39,7 +39,7 @@ const AllergyDropdown = ({
       onChange(item);
       addAllergy.mutate(item, {
         onSuccess: () => {
-          client.invalidateQueries("preferences");
+          client.invalidateQueries({ queryKey: ["preferences"] });
           showToast({ message: "New allergy added.", title: "Success" });
         },
       });

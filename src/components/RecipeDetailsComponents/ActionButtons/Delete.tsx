@@ -5,7 +5,7 @@ import { useSession } from "@/src/providers/auth/AuthProvider";
 import { useDeleteRecipeFromCookbook } from "@/src/hooks/mutations/useDeleteRecipeFromCookbookMutation";
 import { router } from "expo-router";
 import { useNotificationToast } from "@/src/providers/ToastContext";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 const Delete = () => {
   const { selectedItem } = useRecipeItem();
   const { user } = useSession();
@@ -23,7 +23,7 @@ const Delete = () => {
             title: "Recipe removed cookbook",
             duration: 2000,
           });
-          client.invalidateQueries("cookbook");
+          client.invalidateQueries({ queryKey: ["cookbook"] });
           router.replace("/(app)/(tabs)/two");
         },
         onError: (err) => {

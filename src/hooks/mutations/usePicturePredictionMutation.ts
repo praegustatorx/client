@@ -1,6 +1,10 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import * as api from "../../api/api";
+import { Ingredient } from "@/src/constants/Pantry";
+import { PantryItemInput, ErrorResponse } from "../../api/api";
 
-export const usePicturePredictionMutation = () => {
-  return useMutation(api.uploadImageToBePredicted);
+export const usePutItemIngredientMutation = () => {
+  return useMutation<Ingredient, ErrorResponse, PantryItemInput>({
+    mutationFn: api.putIngredientInPantry,
+  });
 };

@@ -3,7 +3,7 @@ import { type FC } from "react";
 import InputRow from "./InputRow";
 import List from "./List";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNotificationToast } from "@/src/providers/ToastContext";
 import { useSession } from "@/src/providers/auth/AuthProvider";
 import { usePreferenceMutations } from "@/src/hooks/mutations/usePreferenceMutations";
@@ -20,10 +20,14 @@ const BlacklistTab: FC<BlacklistTabProps> = (props) => {
   const { showToast } = useNotificationToast();
   const { addBlacklist, deleteBlacklist } = usePreferenceMutations(user!.email);
 
+  const refresh = () => {
+    client.invalidateQueries({ queryKey: ["preferences"] });
+  };
+
   const onSubmit = () => {
     addBlacklist.mutate(newItem, {
       onSuccess: () => {
-        client.invalidateQueries("preferences");
+        refresh();
         showToast({
           message: "Ingredient added to blacklist",
           title: "Success",
@@ -35,7 +39,7 @@ const BlacklistTab: FC<BlacklistTabProps> = (props) => {
   const onDelete = (item: string) => {
     deleteBlacklist.mutate(item, {
       onSuccess: () => {
-        client.invalidateQueries("preferences");
+        refresh();
         showToast({
           message: "Ingredient removed from blacklist.",
           title: "Success",
