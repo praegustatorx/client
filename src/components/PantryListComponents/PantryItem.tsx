@@ -98,7 +98,6 @@ const PantryItem: FC<PantryItemProps> = ({ item, index }) => {
           </View>
         </View>
 
-        {/* Quantity + Delete */}
         <View style={styles.rightSection}>
           <Text style={styles.quantity}>
             {item.quantity?.value?.amount ?? ""}{" "}

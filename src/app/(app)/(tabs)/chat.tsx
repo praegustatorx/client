@@ -13,28 +13,43 @@ import {
   replacePendingMessageWithResult,
 } from "@/src/utils/chatMessageUtils";
 import { useSession } from "@/src/providers/auth/AuthProvider";
+import { router } from "expo-router";
+import { useRecipeCardsContext } from "@/src/providers/RecipeCardsContext";
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [height, setHeight] = useState(0);
   const ask = useSendMessageMutation();
+  const { setRecipeCards } = useRecipeCardsContext();
 
+  const { user } = useSession();
   const onLayout = (event: any) => {
     const { height } = event.nativeEvent.layout;
     setHeight(height / 2);
   };
 
-  const chatId = "TestUser"; //TODo Replace this with user.
   const askChatbot = async (message: string) => {
     const response = await ask.mutateAsync(
-      { chatId, message },
+      { chatId: user?.email!, message },
       {
         onError: (error: ErrorResponse) => {
           Alert.alert("Error", error.message);
         },
       }
     );
-    return response.message;
+    console.log("response", response);
+
+    if (response.text) {
+      console.log("text ");
+    }
+
+    if (response.json) {
+      setRecipeCards(response.json);
+      router.replace("/(app)/RecipeSwipe");
+      console.log("recipe suggestion");
+    }
+
+    return response;
   };
 
   const handleSendMessage = async (inputText: string) => {
@@ -46,7 +61,13 @@ const ChatScreen = () => {
     setMessages((prevMessages) => [...prevMessages, pendingUserMessage]);
 
     try {
-      await askChatbot(inputText);
+      const result = await askChatbot(inputText);
+
+      if (result.json) {
+        setRecipeCards(result.json);
+        router.replace("/(app)/RecipeSwipe");
+        return;
+      }
 
       const confirmedUserMessage = createConfirmedMessage("User", inputText);
       setMessages((prevMessages) =>
@@ -62,7 +83,7 @@ const ChatScreen = () => {
 
       const confirmedAssistantMessage = createConfirmedMessage(
         "Assistant",
-        response
+        response.text
       );
       setMessages((prevMessages) =>
         replacePendingMessageWithResult(
