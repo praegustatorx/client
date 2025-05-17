@@ -4,15 +4,8 @@ import { FlashList } from "@shopify/flash-list";
 import Animated, { ScrollHandlerProcessed } from "react-native-reanimated";
 import TabTitle from "../Shared/TabTitle";
 import EmptyPantryList from "./EmptyPantryList";
-import NotificationToast from "../NotificationToast/NotificationToast";
-
-import SuccessIcon from "../Icons/SuccessIcon";
-import FailIcon from "../Icons/FailIcon";
-
 import { Ingredient } from "@/src/constants/Pantry";
-import ErrorScreen from "./ErrorScreen";
 import PantryItem from "./PantryItem";
-import PantryItem2 from "./PantryItem2";
 
 interface PantryListProps {
   onScroll: ScrollHandlerProcessed<Record<string, unknown>>;
@@ -45,9 +38,7 @@ const PantryList: FC<PantryListProps> = (props) => {
             keyboardDismissMode="interactive"
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
-            ListHeaderComponent={() => (
-              <TabTitle scrollY={scrollY} text="Pantry" />
-            )}
+            ListHeaderComponent={() => <TabTitle text="Pantry" />}
           />
         )}
       </View>
