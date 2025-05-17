@@ -19,9 +19,15 @@ type Props = {
   value: Allergy | null;
   onChange: (value: Allergy) => void;
   disabledItems?: string[];
+  testID?: string;
 };
 
-const AllergyDropdown = ({ value, onChange, disabledItems = [] }: Props) => {
+const AllergyDropdown = ({
+  value,
+  onChange,
+  testID,
+  disabledItems = [],
+}: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const allergyOptions = Object.values(Allergy);
   const { user } = useSession();
@@ -42,7 +48,7 @@ const AllergyDropdown = ({ value, onChange, disabledItems = [] }: Props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID={testID}>
       <Pressable onPress={() => setModalVisible(true)} style={styles.dropdown}>
         <Text style={styles.label}>Add an allergy</Text>
         <AntDesign name="plussquare" size={24} color={Colors.light.tint} />

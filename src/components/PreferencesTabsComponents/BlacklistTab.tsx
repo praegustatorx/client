@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { type FC } from "react";
 import InputRow from "./InputRow";
 import List from "./List";
@@ -7,6 +7,7 @@ import { useQueryClient } from "react-query";
 import { useNotificationToast } from "@/src/providers/ToastContext";
 import { useSession } from "@/src/providers/auth/AuthProvider";
 import { usePreferenceMutations } from "@/src/hooks/mutations/usePreferenceMutations";
+
 interface BlacklistTabProps {
   blacklist: string[];
 }
@@ -18,13 +19,15 @@ const BlacklistTab: FC<BlacklistTabProps> = (props) => {
   const client = useQueryClient();
   const { showToast } = useNotificationToast();
   const { addBlacklist, deleteBlacklist } = usePreferenceMutations(user!.email);
+
   const onSubmit = () => {
     addBlacklist.mutate(newItem, {
       onSuccess: () => {
         client.invalidateQueries("preferences");
-        showToast({ message: "New diet added.", title: "Success" });
-
-        console.log("Added");
+        showToast({
+          message: "Ingredient added to blacklist",
+          title: "Success",
+        });
       },
     });
   };
@@ -40,21 +43,41 @@ const BlacklistTab: FC<BlacklistTabProps> = (props) => {
       },
     });
   };
+
   return (
-    <View className="px-4 pt-4">
+    <View style={styles.container} testID="blacklist-tab">
       <InputRow
         value={newItem}
         onChangeText={setNewItem}
         placeholder="Add ingredient"
         onAdd={() => {
           if (!newItem) return;
-          // addBlacklist.mutate(newItem);
           onSubmit();
           setNewItem("");
         }}
       />
-      <List data={blacklist} onDelete={onDelete} />
+      {blacklist.length === 0 && (
+        <Text style={styles.emptyMessage} testID="blacklist-empty-message">
+          You haven’t blacklisted any ingredients yet.
+        </Text>
+      )}
+
+      <List data={blacklist} onDelete={onDelete} testID="blacklist-list" />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  emptyMessage: {
+    textAlign: "center",
+    color: "#6B7280",
+    marginTop: 16,
+    fontSize: 14,
+  },
+});
+
 export default BlacklistTab;

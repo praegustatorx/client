@@ -8,30 +8,30 @@ export type Slide = {
 export const slides: Slide[] = [
   {
     id: 1,
-    title: "Title for Slide 1",
+    title: "Snap & Save Ingredients",
     description:
-      "Brief and cool description of the first point. This is more text and more and more and more LEBROOOON",
+      "Take a photo of your ingredients and let the app detect them automatically. Review and confirm with a single tap.",
     image: require("@/assets/images/placeholder.png"),
   },
   {
     id: 2,
-    title: "Title for Slide 2",
+    title: "AI-Powered Pantry Insights",
     description:
-      "Brief and cool description of the first point. This is more text and more and more and more LEBROOOON",
+      "Smart predictions prefill details like quantity, type, and expiry — helping you stay organized effortlessly.",
     image: require("@/assets/images/placeholder.png"),
   },
   {
     id: 3,
-    title: "Title for Slide 3",
+    title: "Chat with Your AI Assistant",
     description:
-      "Brief and cool description of the first point. This is more text and more and more and more LEBROOOON",
+      "Need ideas? Talk to your AI assistant to get personalized recipe suggestions based on what’s in your pantry.",
     image: require("@/assets/images/placeholder.png"),
   },
   {
     id: 4,
-    title: "Title for Slide 4",
+    title: "Organize with Custom Tags",
     description:
-      "Brief and cool description of the first point. This is more text and more and more and more LEBROOOON",
+      "Create custom tags like 'vegan', 'breakfast', or 'meal prep' so you can filter and find ingredients easily.",
     image: require("@/assets/images/placeholder.png"),
   },
 ];

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { Allergy } from "@/src/constants/Allergy";
 import InputRow from "./InputRow";
 import { type FC } from "react";
@@ -9,6 +9,7 @@ import { usePreferenceMutations } from "@/src/hooks/mutations/usePreferenceMutat
 import { useSession } from "@/src/providers/auth/AuthProvider";
 import { useQueryClient } from "react-query";
 import { useNotificationToast } from "@/src/providers/ToastContext";
+
 interface AllergiesTabProps {
   allergies: string[];
 }
@@ -33,21 +34,38 @@ const AllergiesTab: FC<AllergiesTabProps> = (props) => {
       },
     });
   };
-  <AllergyDropdown
-    value={selectedAllergy}
-    onChange={setSelectedAllergy}
-    disabledItems={alreadyAdded}
-  />;
 
   return (
-    <View className="px-4 pt-4">
+    <View style={styles.container} testID="allergies-tab">
       <AllergyDropdown
         value={selectedAllergy}
         onChange={setSelectedAllergy}
         disabledItems={alreadyAdded}
+        testID="allergy-dropdown"
       />
-      <List data={allergies} onDelete={onDelete} />
+
+      {allergies.length === 0 && (
+        <Text style={styles.emptyMessage} testID="allergies-empty-message">
+          You haven’t added any allergies yet. Add one using the dropdown above!
+        </Text>
+      )}
+
+      <List data={allergies} onDelete={onDelete} testID="allergies-list" />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  emptyMessage: {
+    textAlign: "center",
+    color: "#6B7280", // Tailwind gray-500
+    marginTop: 16,
+    fontSize: 14,
+  },
+});
+
 export default AllergiesTab;

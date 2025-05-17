@@ -16,17 +16,17 @@ import { Diet } from "@/src/constants/Preferences";
 import { useQueryClient } from "react-query";
 import { useNotificationToast } from "@/src/providers/ToastContext";
 import DeleteIcon from "../Icons/DeleteIcon";
+
 interface DietsTabProps {
   diets: Diet[];
 }
 
-const DietsTab: FC<DietsTabProps> = (props) => {
-  const { diets } = props;
+const DietsTab: FC<DietsTabProps> = ({ diets }) => {
   const { user } = useSession();
   const { addDiet, deleteDiet } = usePreferenceMutations(user!.email);
   const { showToast } = useNotificationToast();
-
   const client = useQueryClient();
+
   const onSubmit = (name: string, description: string) => {
     addDiet.mutate(
       { name, description },
@@ -50,17 +50,27 @@ const DietsTab: FC<DietsTabProps> = (props) => {
   };
 
   return (
-    <View className="px-4 pt-4">
+    <View testID="diets-wrapper" style={styles.wrapper}>
       <DietModal onSubmit={onSubmit} />
+
+      {diets.length === 0 && (
+        <Text testID="diets-empty-message" style={styles.emptyMessage}>
+          You haven’t added any diets yet. Add one using the modal above!
+        </Text>
+      )}
+
       <FlatList
         data={diets}
-        keyExtractor={(item, index) => `${item}-${index}`}
+        keyExtractor={(item, index) => `${item.name}-${index}`}
         renderItem={({ item }) => (
-          <View style={styles.container}>
+          <View style={styles.itemContainer}>
             <Text style={styles.text}>
               {item.name} ({item.description})
             </Text>
-            <TouchableOpacity onPress={() => onDelete(item)}>
+            <TouchableOpacity
+              testID={`delete-${item.name}`}
+              onPress={() => onDelete(item)}
+            >
               <DeleteIcon color="red" size={24} />
             </TouchableOpacity>
           </View>
@@ -69,16 +79,30 @@ const DietsTab: FC<DietsTabProps> = (props) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
-  text: { fontSize: 15 },
-  container: {
+  wrapper: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  itemContainer: {
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-between",
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#E5E7EB",
+    borderBottomColor: "#E5E7EB", // Tailwind gray-200
+  },
+  text: {
+    fontSize: 15,
+  },
+  emptyMessage: {
+    textAlign: "center",
+    color: "#6B7280", // Tailwind gray-500
+    marginTop: 16,
+    fontSize: 14,
   },
 });
+
 export default DietsTab;

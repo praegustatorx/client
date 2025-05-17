@@ -14,9 +14,6 @@ import {
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Colors from "@/src/constants/Colors";
-import { usePreferenceMutations } from "@/src/hooks/mutations/usePreferenceMutations";
-import { useSession } from "@/src/providers/auth/AuthProvider";
-import { useNotificationToast } from "@/src/providers/ToastContext";
 type Props = {
   onSubmit: (name: string, description: string) => void;
 };
