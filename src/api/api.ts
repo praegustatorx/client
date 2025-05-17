@@ -69,6 +69,7 @@ interface RecipeDescription {
 }
 
 export interface Recipe {
+  id: string;
   name: string;
   description: RecipeDescription;
   ingredients: Ingredient[];
@@ -249,5 +250,22 @@ export const uploadImageToBePredicted = async (
     return result;
   } catch (error: any) {
     throw new Error(error.message || "Upload failed");
+  }
+};
+
+export const deleteRecipeFromCookbook = async (
+  recipeId: string,
+  userId: string
+) => {
+  try {
+    const path = `${API_URL}/cookbook/${userId}/recipes/${recipeId}`;
+    const response = await axios.delete(path);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
   }
 };

@@ -5,10 +5,12 @@ import RecipeActionText from "./RecipeActionText";
 interface RecipeActionButtonProps {
   action: string;
   children: ReactNode;
+  onClick?: () => void;
 }
 
 const RecipeActionButton: FC<RecipeActionButtonProps> = ({
   action,
+  onClick,
   children,
 }) => {
   const lowerAction = action.toLowerCase();
@@ -23,6 +25,7 @@ const RecipeActionButton: FC<RecipeActionButtonProps> = ({
   return (
     <TouchableOpacity
       key={action}
+      onPress={onClick}
       style={[
         styles.actionButton,
         {

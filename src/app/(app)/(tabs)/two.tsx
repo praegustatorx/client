@@ -21,14 +21,6 @@ const AnimatedMasonryFlashList =
 
 const { width } = Dimensions.get("window");
 
-const dummyData = [
-  { id: "1", uri: "https://source.unsplash.com/random/200x300", name: "cool1" },
-  { id: "2", uri: "https://source.unsplash.com/random/200x150", name: "cool2" },
-  { id: "3", uri: "https://source.unsplash.com/random/200x250", name: "cool3" },
-  { id: "4", uri: "https://source.unsplash.com/random/200x220", name: "cool4" },
-  { id: "5", uri: "https://source.unsplash.com/random/200x180", name: "cool5" },
-];
-
 export default function TabTwoScreen() {
   const { user } = useSession();
 
@@ -40,7 +32,7 @@ export default function TabTwoScreen() {
     queryFn: () => fetchCookbook(user!.email), // TODO: remove hardcoding
   });
 
-  console.log("data", data);
+
   const scrollY = useSharedValue(0);
 
   const scrollHandler = useAnimatedScrollHandler({
