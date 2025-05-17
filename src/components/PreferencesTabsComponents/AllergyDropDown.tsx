@@ -10,20 +10,33 @@ import {
 import { Allergy } from "@/src/constants/Allergy";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Colors from "@/src/constants/Colors";
+import { useSession } from "@/src/providers/auth/AuthProvider";
+import { usePreferenceMutations } from "@/src/hooks/mutations/usePreferenceMutations";
+import { useQueryClient } from "react-query";
+import { useNotificationToast } from "@/src/providers/ToastContext";
 
 type Props = {
   value: Allergy | null;
   onChange: (value: Allergy) => void;
-  disabledItems?: Allergy[];
+  disabledItems?: string[];
 };
 
 const AllergyDropdown = ({ value, onChange, disabledItems = [] }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const allergyOptions = Object.values(Allergy);
-
+  const { user } = useSession();
+  const { addAllergy } = usePreferenceMutations(user!.email);
+  const client = useQueryClient();
+  const { showToast } = useNotificationToast();
   const handleSelect = (item: Allergy) => {
     if (!disabledItems.includes(item)) {
       onChange(item);
+      addAllergy.mutate(item, {
+        onSuccess: () => {
+          client.invalidateQueries("preferences");
+          showToast({ message: "New allergy added.", title: "Success" });
+        },
+      });
       setModalVisible(false);
     }
   };
@@ -31,7 +44,7 @@ const AllergyDropdown = ({ value, onChange, disabledItems = [] }: Props) => {
   return (
     <View style={styles.container}>
       <Pressable onPress={() => setModalVisible(true)} style={styles.dropdown}>
-        <Text style={styles.label}>Select an allergy</Text>
+        <Text style={styles.label}>Add an allergy</Text>
         <AntDesign name="plussquare" size={24} color={Colors.light.tint} />
       </Pressable>
       <Modal
@@ -68,7 +81,6 @@ const AllergyDropdown = ({ value, onChange, disabledItems = [] }: Props) => {
                       ]}
                     >
                       {item}
-                      {isDisabled ? " (Added)" : ""}
                     </Text>
                   </Pressable>
                 );

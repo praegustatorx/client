@@ -6,10 +6,17 @@ import {
   TextInput,
   View,
   StyleSheet,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+  TouchableOpacity,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Colors from "@/src/constants/Colors";
-
+import { usePreferenceMutations } from "@/src/hooks/mutations/usePreferenceMutations";
+import { useSession } from "@/src/providers/auth/AuthProvider";
+import { useNotificationToast } from "@/src/providers/ToastContext";
 type Props = {
   onSubmit: (name: string, description: string) => void;
 };
@@ -20,6 +27,7 @@ const DietModal = ({ onSubmit }: Props) => {
   const [description, setDescription] = useState("");
 
   const handleSave = () => {
+    console.log("press");
     if (name.trim()) {
       onSubmit(name.trim(), description.trim());
       setModalVisible(false);
@@ -34,40 +42,49 @@ const DietModal = ({ onSubmit }: Props) => {
         <Text style={styles.label}>Add a diet</Text>
         <AntDesign name="plussquare" size={24} color={Colors.light.tint} />
       </Pressable>
-
       <Modal
         animationType="fade"
         transparent
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <Pressable
-          style={styles.modalBackdrop}
-          onPressOut={() => setModalVisible(false)}
-        >
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Add a Custom Diet</Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <Pressable
+            style={styles.modalBackdrop}
+            onPress={() => setModalVisible(false)}
+          >
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              style={styles.keyboardAvoidingView}
+            >
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Add a Custom Diet</Text>
 
-            <TextInput
-              placeholder="Diet name"
-              style={styles.input}
-              value={name}
-              onChangeText={setName}
-            />
+                <TextInput
+                  placeholder="Diet name"
+                  style={styles.input}
+                  value={name}
+                  onChangeText={setName}
+                />
 
-            <TextInput
-              placeholder="Description"
-              style={styles.descriptionInput}
-              value={description}
-              onChangeText={setDescription}
-              multiline
-            />
+                <TextInput
+                  placeholder="Description"
+                  style={styles.descriptionInput}
+                  value={description}
+                  onChangeText={setDescription}
+                  multiline
+                />
 
-            <Pressable style={styles.saveButton} onPress={handleSave}>
-              <Text style={styles.saveButtonText}>Save</Text>
-            </Pressable>
-          </View>
-        </Pressable>
+                <TouchableOpacity
+                  style={styles.saveButton}
+                  onPress={handleSave}
+                >
+                  <Text style={styles.saveButtonText}>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
+          </Pressable>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
@@ -76,6 +93,12 @@ const DietModal = ({ onSubmit }: Props) => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+  },
+  keyboardAvoidingView: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
   },
   label: {
     fontWeight: "600",

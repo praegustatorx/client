@@ -14,7 +14,11 @@ const List = ({ data, onDelete }: any) => (
     renderItem={({ item }) => (
       <View style={styles.container}>
         <Text style={styles.text}>{item}</Text>
-        <TouchableOpacity onPress={() => onDelete(item)}>
+        <TouchableOpacity
+          onPress={() => {
+            onDelete(item);
+          }}
+        >
           <DeleteIcon color="red" size={24} />
         </TouchableOpacity>
       </View>

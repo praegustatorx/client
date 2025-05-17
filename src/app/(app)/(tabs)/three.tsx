@@ -14,11 +14,23 @@ import AllergiesTab from "@/src/components/PreferencesTabsComponents/AllergiesTa
 import DietsTab from "@/src/components/PreferencesTabsComponents/DietsTab";
 import BlacklistTab from "@/src/components/PreferencesTabsComponents/BlacklistTab";
 import Colors from "@/src/constants/Colors";
+import { useQuery } from "react-query";
+import { useSession } from "@/src/providers/auth/AuthProvider";
+import axios from "axios";
+import { fetchPreferences } from "@/src/api/api";
+import { Preference } from "@/src/constants/Preferences";
 
 const PreferencesTabs = () => {
   const insets = useSafeAreaInsets();
   const layout = Dimensions.get("window");
-  const data = dummyPreferences;
+
+  const { user } = useSession();
+  console.log("user", user);
+  ``;
+  const { data, isLoading } = useQuery<Preference>({
+    queryKey: ["preferences"],
+    queryFn: () => fetchPreferences(user!.email),
+  });
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -27,12 +39,19 @@ const PreferencesTabs = () => {
     { key: "blacklist", title: "Blacklist" },
   ]);
 
-  const renderScene = SceneMap({
-    allergies: () => <AllergiesTab data={data} />,
-    diets: () => <DietsTab data={data} />,
-    blacklist: () => <BlacklistTab data={data} />,
-  });
+  if (isLoading) {
+    return (
+      <View>
+        <Text> LOADING </Text>
+      </View>
+    );
+  }
 
+  const renderScene = SceneMap({
+    allergies: () => <AllergiesTab allergies={data!.allergies} />,
+    diets: () => <DietsTab diets={data!.diets} />,
+    blacklist: () => <BlacklistTab blacklist={data!.blacklist} />,
+  });
   return (
     <View style={{ flex: 1, paddingTop: insets.top }}>
       <Text className="text-xl font-bold text-center mt-4">Preferences</Text>
@@ -41,7 +60,6 @@ const PreferencesTabs = () => {
         renderScene={renderScene}
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
-        
         renderTabBar={(props) => (
           <TabBar
             {...props}
@@ -63,8 +81,7 @@ const PreferencesTabs = () => {
             activeColor={Colors.light.tint}
             inactiveColor="black"
             bounces
-
-            />
+          />
         )}
       />
     </View>

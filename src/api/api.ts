@@ -235,7 +235,7 @@ export const uploadImageToBePredicted = async (
 export const addAllergy = async (userId: string, allergy: string) => {
   try {
     const path = `${API_URL}/preferences/${userId}/allergies`;
-    const response = await axios.post(path, allergy);
+    const response = await axios.post(path, { allergy: allergy });
     return response.data;
   } catch (error: any) {
     const errorResponse: ErrorResponse = {
@@ -294,7 +294,7 @@ export const deleteDiet = async (userId: string, dietName: string) => {
 export const addBlacklist = async (userId: string, ingredient: string) => {
   try {
     const path = `${API_URL}/preferences/${userId}/blacklist`;
-    const response = await axios.post(path, ingredient);
+    const response = await axios.post(path, { ingredient });
     return response.data;
   } catch (error: any) {
     const errorResponse: ErrorResponse = {
@@ -307,8 +307,23 @@ export const addBlacklist = async (userId: string, ingredient: string) => {
 
 export const deleteBlacklist = async (userId: string, ingredient: string) => {
   try {
-    const path = `${API_URL}/preferences/${userId}/diets/${ingredient}`;
+    const path = `${API_URL}/preferences/${userId}/blacklist/${ingredient}`;
     const response = await axios.delete(path);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+
+export const fetchPreferences = async (userId: string): Promise<any> => {
+  try {
+    const path = `${API_URL}/preferences/${userId}`;
+    const response = await axios.get(path);
+    console.log("pi6ka");
     return response.data;
   } catch (error: any) {
     const errorResponse: ErrorResponse = {
