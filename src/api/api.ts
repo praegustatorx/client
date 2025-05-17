@@ -298,9 +298,6 @@ export const addDiet = async (
   }
 };
 
-export const deleteDiet = async (userId: string, dietName: string) => {
-  try {
-    const path = `${API_URL}/preferences/${userId}/diets/${dietName}`;
 export const deleteRecipeFromCookbook = async (
   recipeId: string,
   userId: string
@@ -351,6 +348,19 @@ export const fetchPreferences = async (userId: string): Promise<any> => {
     const path = `${API_URL}/preferences/${userId}`;
     const response = await axios.get(path);
     console.log("pi6ka");
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
+export const deleteDiet = async (userId: string, dietName: string) => {
+  try {
+    const path = `${API_URL}/preferences/${userId}/diets/${dietName}`;
+    const response = await axios.delete(path);
     return response.data;
   } catch (error: any) {
     const errorResponse: ErrorResponse = {
