@@ -14,6 +14,7 @@ import ErrorScreen from "@/src/components/PantryListComponents/ErrorScreen";
 import LoadingScreen from "@/src/components/Shared/LoadingScreen";
 import TabTitle from "@/src/components/Shared/TabTitle";
 import { useSession } from "@/src/providers/auth/AuthProvider";
+import { Recipe } from "@/src/api/api";
 
 const AnimatedMasonryFlashList =
   Animated.createAnimatedComponent(MasonryFlashList);
@@ -31,9 +32,7 @@ export default function TabTwoScreen() {
     queryFn: () => fetchCookbook(user!.email), // TODO: remove hardcoding
   });
 
-  console.log(data?.recipes);
 
-  console.log("data", data);
   const scrollY = useSharedValue(0);
 
   const scrollHandler = useAnimatedScrollHandler({
@@ -60,10 +59,32 @@ export default function TabTwoScreen() {
   }
 
   return (
-    <SafeAreaView className="h-[100%]">
-      <View className="flex-1 px-3 pt-10">
-        <Text className="text-3xl font-extrabold">My Recipes</Text>
+    <SafeAreaView style={styles.page}>
+      <View style={styles.container}>
+        <NavigationHeader scrollY={scrollY} title="Cookbook" />
+        <AnimatedMasonryFlashList
+          data={data!.recipes}
+          onScroll={scrollHandler}
+          keyExtractor={(item: any) => item.id}
+          estimatedItemSize={50}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item, index }: { item: any; index: number }) => (
+            <RecipeCard item={item} width={width} index={index} />
+          )}
+          ListHeaderComponent={() => <TabTitle text="Cookbook" />}
+        />
       </View>
     </SafeAreaView>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 20,
+    paddingHorizontal: 4,
+  },
+  page: {
+    flex: 1,
+  },
+});

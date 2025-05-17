@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Ingredient, Nutrition } from "../constants/Pantry";
+import { RecipePayload } from "../constants/Recipe";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -7,7 +8,6 @@ export interface LoginCredentials {
   email: string;
   password: string;
 }
-
 export interface LoginResponse {
   token: string;
   loginUser: {
@@ -32,7 +32,8 @@ export interface SendMessage {
 }
 
 export interface MessageResponse {
-  message: string;
+  text: string;
+  json?: RecipePayload[];
 }
 
 export interface SendImage {
@@ -161,9 +162,12 @@ export const fetchPantry = async (
   }
 };
 
-export const fetchCookbook = async (): Promise<RegisterCredentials> => {
+export const fetchCookbook = async (
+  userId: string
+): Promise<CookbookResponse> => {
+  const path = `${API_URL}/cookbook/${userId}`;
   try {
-    const response = await axios.get("");
+    const response = await axios.get(path);
     return response.data;
   } catch (error: any) {
     const errorResponse: ErrorResponse = {
@@ -211,6 +215,20 @@ export const deleteIngredientFromPantry = async ({
   }
 };
 
+export const addRecipe = async (userId: string, data: RecipePayload) => {
+  console.log("data", data);
+  const path = `${API_URL}/cookbook/${userId}/recipes`;
+  try {
+    const response = await axios.post(path, data);
+    return response.data;
+  } catch (error: any) {
+    const errorResponse: ErrorResponse = {
+      message: error.response.data.message,
+      name: error.name,
+    };
+    throw errorResponse;
+  }
+};
 export const uploadImageToBePredicted = async (
   formData: FormData
 ): Promise<PredictedImageResponse> => {

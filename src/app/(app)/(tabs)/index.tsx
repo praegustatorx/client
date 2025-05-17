@@ -15,8 +15,11 @@ import MessageScreen from "@/src/components/PantryListComponents/MessageScreen";
 import NavigationHeader from "@/src/components/NavigationHeader/NavigationHeader";
 import FloatingButton from "@/src/components/PantryListComponents/FloatingButtons/FloatingButton";
 import LoadingScreen from "@/src/components/Shared/LoadingScreen";
+import { useSession } from "@/src/providers/auth/AuthProvider";
 
 export default function TabOneScreen() {
+  const { user } = useSession();
+
   const { data, refetch, isError, isLoading } = useQuery<
     FetchPantryResponse,
     Error
@@ -53,7 +56,7 @@ export default function TabOneScreen() {
     );
   }
   return (
-    <SafeAreaView className="h-[100%]" style={styles.page}>
+    <SafeAreaView style={styles.page}>
       <View style={styles.container}>
         <NavigationHeader scrollY={scrollY} title="Pantry" />
         <PantryList

@@ -13,6 +13,14 @@ const DevDashBoard = () => {
       >
         Open Camera
       </BaseButton>
+      <BaseButton
+        variant="primary"
+        onPress={() => {
+          router.push("/(app)/RecipeSwipe");
+        }}
+      >
+        RecipeTest
+      </BaseButton>
     </SafeAreaView>
   );
 };
