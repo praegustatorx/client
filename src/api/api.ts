@@ -191,6 +191,7 @@ export const putIngredientInPantry = async (
       message: error.response.data.message,
       name: error.name,
     };
+    console.log(errorResponse);
     throw errorResponse;
   }
 };

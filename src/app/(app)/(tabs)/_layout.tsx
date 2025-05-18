@@ -88,7 +88,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="three" 
+        name="three"
         options={{
           title: "User",
           headerShown: false,
@@ -106,15 +106,6 @@ export default function TabLayout() {
           title: "Foodie",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="comment" color={color} library="FontAwesome" />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="four"
-        options={{
-          title: "Developer Dash",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="dashboard" color={color} library="FontAwesome" />
           ),
         }}
       />

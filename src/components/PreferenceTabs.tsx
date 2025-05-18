@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Dimensions, Text } from "react-native";
+import { View, Dimensions, Text, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import AllergiesTab from "@/src/components/PreferencesTabsComponents/AllergiesTab";
@@ -16,8 +16,6 @@ const PreferencesTabs = () => {
   const layout = Dimensions.get("window");
 
   const { user } = useSession();
-  console.log("user", user);
-  ``;
   const { data, isLoading } = useQuery<Preference>({
     queryKey: ["preferences"],
     queryFn: () => fetchPreferences(user!.email),
@@ -32,8 +30,8 @@ const PreferencesTabs = () => {
 
   if (isLoading) {
     return (
-      <View>
-        <Text> LOADING </Text>
+      <View style={styles.loadingContainer}>
+        <Text>LOADING</Text>
       </View>
     );
   }
@@ -43,9 +41,14 @@ const PreferencesTabs = () => {
     diets: () => <DietsTab diets={data!.diets} />,
     blacklist: () => <BlacklistTab blacklist={data!.blacklist} />,
   });
+
   return (
-    <View style={{ flex: 1, paddingTop: insets.top }}>
-      <Text className="text-xl font-bold text-center mt-4">Preferences</Text>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <Text style={styles.title}>Preferences</Text>
+      <Text style={styles.description}>
+        Manage your dietary preferences to personalize your experience. Specify
+        any allergies, diets you follow, and ingredients you'd like to avoid.
+      </Text>
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
@@ -54,21 +57,9 @@ const PreferencesTabs = () => {
         renderTabBar={(props) => (
           <TabBar
             {...props}
-            indicatorStyle={{ backgroundColor: "none" }}
-            style={{
-              backgroundColor: "#f9f9f9",
-              margin: 10,
-              borderRadius: 25,
-
-              shadowColor: Colors.light.tint,
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 6,
-              elevation: 5,
-            }}
-            tabStyle={{
-              borderRadius: 12,
-            }}
+            indicatorStyle={styles.indicator}
+            style={styles.tabBar}
+            tabStyle={styles.tab}
             activeColor={Colors.light.tint}
             inactiveColor="black"
             bounces
@@ -78,5 +69,45 @@ const PreferencesTabs = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 16,
+  },
+  description: {
+    textAlign: "center",
+    fontSize: 16,
+    color: "#6b7280",
+    marginTop: 8,
+    marginHorizontal: 16,
+  },
+  tabBar: {
+    backgroundColor: "#f9f9f9",
+    margin: 10,
+    borderRadius: 25,
+    shadowColor: Colors.light.tint,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+  tab: {
+    borderRadius: 12,
+  },
+  indicator: {
+    backgroundColor: "none",
+  },
+});
 
 export default PreferencesTabs;

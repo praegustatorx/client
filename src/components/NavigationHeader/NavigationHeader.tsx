@@ -1,4 +1,3 @@
-// src/components/AnimatedHeader.tsx
 import { Text } from "@/src/components/Themed";
 import { StyleSheet, View } from "react-native";
 import Animated, {
@@ -8,7 +7,7 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { StatusBar } from "expo-status-bar";
-import { BlurView } from "expo-blur";
+import TabTitle from "../Shared/TabTitle";
 
 type NavigationHeaderProps = {
   scrollY: SharedValue<number>;
@@ -45,8 +44,7 @@ export default function NavigationHeader({
       style={[StyleSheet.absoluteFill, styles.header, headerStyle]}
     >
       <StatusBar translucent={false} />
-      <BlurView intensity={50} tint="light" style={StyleSheet.absoluteFill} />
-      <Text className="text-3xl font-semibold text-white z-10">{title}</Text>
+      <TabTitle text={title} />
     </Animated.View>
   );
 }
@@ -58,15 +56,24 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 10,
-    height: 50,
-    paddingHorizontal: 10,
+    height: 70,
+    paddingHorizontal: 16,
     justifyContent: "center",
-    alignItems: "center",
-    borderBottomColor: "black",
-    borderBottomWidth: 2,
+    backgroundColor: "#f3f3f3",
 
+    // Light bottom border
+    borderBottomColor: "#E5E7EB",
+    borderBottomWidth: 1,
+
+    // Rounded bottom corners
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+
+    // Bottom-only shadow
     shadowColor: "#000",
-
+    shadowOffset: { width: 0, height: 10 }, // Only downward
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
     elevation: 4,
   },
 });
