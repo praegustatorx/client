@@ -32,7 +32,7 @@ const CameraScreen = () => {
     ImagePicker.ImagePickerAsset | CameraCapturedPicture | undefined
   >(undefined);
   const { launchImageLibrary } = useMediaLibrary();
-  const { mutate, isLoading } = usePicturePredictionMutation();
+  const { mutate, isPending } = usePicturePredictionMutation();
 
   const { mode, imageUri } = useLocalSearchParams();
   const { setPredictedItem } = usePredictedItem();
@@ -92,24 +92,28 @@ const CameraScreen = () => {
     setImage(image);
   };
 
-  if (!permission) return <View />;
+  if (!permission) return <View testID="no-permission-view" />;
   if (!permission.granted) {
     return (
-      <View className="flex-1 justify-center">
+      <View testID="permission-request-view" className="flex-1 justify-center">
         <Text className="text-center pb-3">
           We need your permission to show the camera
         </Text>
-        <Button onPress={requestPermission} title="Grant Permission" />
+        <Button
+          testID="request-permission-button"
+          onPress={requestPermission}
+          title="Grant Permission"
+        />
       </View>
     );
   }
 
-  if (isLoading) {
+  if (isPending) {
     return <AnalyzingOverlay />;
   }
 
   return (
-    <View className="flex-1">
+    <View testID="camera-screen-root" className="flex-1">
       {image ? (
         <CameraImagePreview
           src={image.uri}
@@ -119,15 +123,18 @@ const CameraScreen = () => {
         />
       ) : (
         <CameraView
+          testID="camera-view"
           style={styles.camera}
           facing="back"
           ref={cameraRef}
           flash={flash}
           autofocus="on"
-          // poster=""`
         >
           <View className="flex items-start">
-            <CameraButton Icon={FlashButton(flash)} onPress={toggleFlash} />
+            <CameraButton
+              Icon={FlashButton(flash)}
+              onPress={toggleFlash}
+            />
           </View>
           <CameraControlBar
             onShutter={onImageSelection}

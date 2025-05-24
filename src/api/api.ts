@@ -59,7 +59,7 @@ export interface PantryItemInput {
   carbohydrates: number;
 }
 
-interface PredictedImageResponse {
+export interface PredictedImageResponse {
   type: string;
   info: Nutrition;
 }

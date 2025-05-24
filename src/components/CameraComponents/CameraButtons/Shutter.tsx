@@ -9,7 +9,11 @@ const Shutter: FC<ShutterProps> = (props) => {
   const { onPress } = props;
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.shutterButtonShell}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={styles.shutterButtonShell}
+      testID="shutter-button"
+    >
       <View style={styles.ShutterButtonInner} />
     </TouchableOpacity>
   );

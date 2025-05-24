@@ -21,7 +21,7 @@ const CameraImagePreview: FC<CameraImagePreviewType> = ({
   mode,
 }) => {
   return (
-    <View className="flex flex-1 relative">
+    <View className="flex flex-1 relative" testID="camera-image-preview">
       <Image source={{ uri: src }} style={styles.image} contentFit="cover" />
       <View className="flex-row absolute bottom-10 left-0 right-0 gap-8 justify-center">
         {mode === "media-preview-only" ? (
@@ -29,6 +29,7 @@ const CameraImagePreview: FC<CameraImagePreviewType> = ({
             icon={<MaterialIcons name="cancel" size={40} color="white" />}
             onPress={() => router.replace("/(app)/(tabs)")}
             label="Cancel"
+            testId="cancel-button"
           />
         ) : (
           <CameraImagePreviewButton
@@ -41,6 +42,7 @@ const CameraImagePreview: FC<CameraImagePreviewType> = ({
             }
             onPress={onRetake}
             label="Retake"
+            testId="retake-button"
           />
         )}
 
@@ -48,6 +50,7 @@ const CameraImagePreview: FC<CameraImagePreviewType> = ({
           icon={<Ionicons name="sparkles" size={40} color="white" />}
           label="Analyze"
           onPress={onAction}
+          testId="action-button"
         />
       </View>
     </View>

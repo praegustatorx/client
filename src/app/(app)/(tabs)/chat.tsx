@@ -30,23 +30,17 @@ const ChatScreen = () => {
 
   const askChatbot = async (message: string) => {
     const response = await ask.mutateAsync(
-      { chatId: user?.email!, message },
+      { chatId: user!.email!, message },
       {
         onError: (error: ErrorResponse) => {
           Alert.alert("Error", error.message);
         },
       }
     );
-    console.log("response", response);
-
-    if (response.text) {
-      console.log("text ");
-    }
 
     if (response.json) {
       setRecipeCards(response.json);
       router.replace("/(app)/RecipeSwipe");
-      console.log("recipe suggestion");
     }
 
     return response;

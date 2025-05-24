@@ -4,7 +4,7 @@ import LottieView from "lottie-react-native";
 
 const AnalyzingOverlay = () => {
   return (
-    <View style={styles.overlay}>
+    <View style={styles.overlay} testID="analyzing-overlay">
       <LottieView
         source={require("@/assets/animations/Analyzing.json")}
         autoPlay

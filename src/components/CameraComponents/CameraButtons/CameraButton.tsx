@@ -9,7 +9,11 @@ interface CameraButtonProps {
 const CameraButton: FC<CameraButtonProps> = (props) => {
   const { onPress, Icon } = props;
   return (
-    <TouchableOpacity onPress={onPress} className="items-center">
+    <TouchableOpacity
+      onPress={onPress}
+      className="items-center"
+      testID="flash-toggle-button"
+    >
       {Icon}
     </TouchableOpacity>
   );

@@ -13,7 +13,10 @@ interface CameraControlBarProps {
 const CameraControlBar: FC<CameraControlBarProps> = (props) => {
   const { takeAPhoto, onShutter } = props;
   return (
-    <View className="w-full flex-row justify-around items-center">
+    <View
+      className="w-full flex-row justify-around items-center"
+      testID="camera-control-bar"
+    >
       <CameraButton
         Icon={<MaterialIcons name="cancel" size={40} color="white" />}
         onPress={() => router.back()}
