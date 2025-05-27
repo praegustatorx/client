@@ -5,15 +5,20 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Slot } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
-import { AuthProvider as AuthProviderTemp } from "../providers/AuthProvider";
-import { AuthProvider } from "../providers/auth/AuthProviderReal";
+import { AuthProvider } from "../providers/auth/AuthProvider";
 import { useColorScheme } from "@/src/components/useColorScheme";
-import { QueryClient, QueryClientProvider } from "react-query"; // Import necessary components
-import '../../global.css';
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "../../global.css";
+import { NotificationToastProvider } from "../providers/ToastContext";
+import { PredictedItemProvider } from "../providers/PredictedItemContext";
+import { PantryItemProvider } from "../providers/PantryItemContext";
+import { RecipeItemProvider } from "../providers/RecipeItemContext";
+import { RecipeCardsProvider } from "../providers/RecipeCardsContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -51,19 +56,34 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+const queryClient = new QueryClient();
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  const queryClient = new QueryClient();
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <AuthProviderTemp>
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <QueryClientProvider client={queryClient}>
-            <Slot />
-          </QueryClientProvider>
+          <NotificationToastProvider>
+            <RecipeItemProvider>
+              <RecipeCardsProvider>
+                <PantryItemProvider>
+                  <PredictedItemProvider>
+                    <Stack screenOptions={{ headerShown: false }}>
+                      <Stack.Screen
+                        name="modal"
+                        options={{
+                          presentation: "modal",
+                        }}
+                      />
+                    </Stack>
+                  </PredictedItemProvider>
+                </PantryItemProvider>
+              </RecipeCardsProvider>
+            </RecipeItemProvider>
+          </NotificationToastProvider>
         </AuthProvider>
-      </AuthProviderTemp>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }
